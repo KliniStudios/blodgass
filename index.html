@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABG Reader — Blood Gas Trainer</title>
+<title>ABG Reader: Blood Gas Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
@@ -369,7 +369,8 @@ main{max-width:var(--maxw); margin:0 auto; padding:0 28px 80px;}
 }
 .cn-toggle:hover{border-color:var(--teal);}
 .cn-toggle.active{background:var(--teal); color:#fff; border-color:var(--teal);}
-.cn-toggle.tk{font-style:italic;}
+.cn-toggle.cn-toggle-color{font-size:11px; color:var(--ink-faint);}
+.cn-toggle.cn-toggle-color.active{background:var(--teal); color:#fff; border-color:var(--teal);}
 .cn-toggle.tf{font-weight:800;}
 .cn-toggle.tu{text-decoration:underline;}
 .cn-copy{
@@ -553,6 +554,15 @@ body.fs-xlarge{zoom:1.32;}
     </div>
   </div>
   <div class="settings-section">
+    <p class="settings-label" data-i18n="settingsSymbol">Avvikmarkering</p>
+    <div class="settings-options" id="symbolOptions">
+      <button type="button" class="settings-opt active" data-sym="arrows">↑ / ↓</button>
+      <button type="button" class="settings-opt" data-sym="filled">⬆ / ⬇</button>
+      <button type="button" class="settings-opt" data-sym="plusminus">+ / −</button>
+      <button type="button" class="settings-opt" data-sym="parens">(↑) / (↓)</button>
+    </div>
+  </div>
+  <div class="settings-section">
     <p class="settings-label" data-i18n="settingsFont">Font</p>
     <div class="settings-options" id="fontOptions">
       <button type="button" class="settings-opt settings-opt-font" data-font="plex">IBM Plex</button>
@@ -576,9 +586,7 @@ body.fs-xlarge{zoom:1.32;}
 <section class="hero">
   <div class="wrap hero-inner">
     <div class="hero-text">
-      <p class="eyebrow" data-i18n="heroEyebrow">prototype</p>
-      <h1 data-i18n="heroH1">Read an arterial blood gas</h1>
-      <p class="hero-lede" data-i18n="heroLede">Eight parameters, eleven worked presets, and a step-by-step analyzer that shows its reasoning — including how the body compensates for respiratory and metabolic disorders, and when compensation stops adding up.</p>
+      <h1 data-i18n="heroH1">Arteriell blodgass</h1>
       <div class="hero-actions">
         <button class="btn-primary" data-goto="panel-presets" data-i18n="heroBtnPresets">Browse presets</button>
         <button class="btn-ghost" data-goto="panel-analyzer" data-i18n="heroBtnAnalyzer">Open the analyzer</button>
@@ -616,7 +624,7 @@ body.fs-xlarge{zoom:1.32;}
     </div>
     <div class="param-grid" id="paramGrid"></div>
     <div class="electrolyte-strip">
-      <p class="eyebrow" data-i18n="refElectrolyteEyebrow">Supporting electrolytes — used for the anion gap</p>
+      <p class="eyebrow" data-i18n="refElectrolyteEyebrow">Supporting electrolytes: used for the anion gap</p>
       <div class="electrolyte-row" id="electrolyteRow"></div>
     </div>
   </section>
@@ -632,7 +640,7 @@ body.fs-xlarge{zoom:1.32;}
     <div class="panel-head">
       <p class="eyebrow" data-i18n="tabAnalyzer">03 · Analyzer</p>
       <h2 data-i18n="analyzerH2">Enter a gas, see the reasoning</h2>
-      <p class="panel-intro" data-i18n="analyzerIntro">Fill in what you have — pH, pCO₂ and HCO₃⁻ are the minimum. Electrolytes unlock the anion gap; pO₂ unlocks an oxygenation note.</p>
+      <p class="panel-intro" data-i18n="analyzerIntro">Fill in what you have: pH, pCO₂ and HCO₃⁻ are the minimum. Electrolytes unlock the anion gap; pO₂ unlocks an oxygenation note.</p>
     </div>
     <div class="analyzer-grid">
       <form class="analyzer-form" id="analyzerForm" novalidate>
@@ -640,19 +648,19 @@ body.fs-xlarge{zoom:1.32;}
           <p class="form-section-title" data-i18n="formSectionAcidBase">Acid–base</p>
           <div class="field-row">
             <label class="field" for="in_ph">
-              <span class="field-label">pH <button type="button" class="info-btn" tabindex="-1" data-param="ph" aria-label="About pH">?</button></span>
+              <span class="field-label">pH</span>
               <input type="text" inputmode="decimal" id="in_ph" placeholder="7.35–7.45">
             </label>
             <label class="field" for="in_pco2">
-              <span class="field-label">pCO₂ <span class="field-unit" id="unitLabelPco2">kPa</span> <button type="button" class="info-btn" tabindex="-1" data-param="pco2" aria-label="About pCO2">?</button></span>
+              <span class="field-label">pCO₂ <span class="field-unit" id="unitLabelPco2">kPa</span></span>
               <input type="text" inputmode="decimal" id="in_pco2" placeholder="4.7–6.3">
             </label>
             <label class="field" for="in_hco3">
-              <span class="field-label">HCO₃⁻ <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="hco3" aria-label="About HCO3">?</button></span>
+              <span class="field-label">HCO₃⁻ <span class="field-unit">mmol/L</span></span>
               <input type="text" inputmode="decimal" id="in_hco3" placeholder="22–26">
             </label>
             <label class="field" for="in_be">
-              <span class="field-label" data-i18n="fieldLabelBE">Base excess <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="be" aria-label="About base excess">?</button></span>
+              <span class="field-label" data-i18n="fieldLabelBE">Base excess <span class="field-unit">mmol/L</span></span>
               <input type="text" inputmode="decimal" id="in_be" placeholder="−3 to +3">
             </label>
           </div>
@@ -661,11 +669,11 @@ body.fs-xlarge{zoom:1.32;}
           <p class="form-section-title" data-i18n="formSectionOxy">Oxygenation <span class="optional-tag" data-i18n="optionalTag">optional</span></p>
           <div class="field-row">
             <label class="field" for="in_po2">
-              <span class="field-label">pO₂ <span class="field-unit" id="unitLabelPo2">kPa</span> <button type="button" class="info-btn" tabindex="-1" data-param="po2" aria-label="About pO2">?</button></span>
+              <span class="field-label">pO₂ <span class="field-unit" id="unitLabelPo2">kPa</span></span>
               <input type="text" inputmode="decimal" id="in_po2" placeholder="10.0–14.0">
             </label>
             <label class="field" for="in_sao2">
-              <span class="field-label">SaO₂ <span class="field-unit">%</span> <button type="button" class="info-btn" tabindex="-1" data-param="sao2" aria-label="About SaO2">?</button></span>
+              <span class="field-label">SaO₂ <span class="field-unit">%</span></span>
               <input type="text" inputmode="decimal" id="in_sao2" placeholder="97.5–99.9">
             </label>
             <label class="field" for="in_fio2">
@@ -673,13 +681,13 @@ body.fs-xlarge{zoom:1.32;}
               <input type="text" inputmode="decimal" id="in_fio2" placeholder="21">
             </label>
             <label class="field" for="in_lactate">
-              <span class="field-label" data-i18n="fieldLabelLactate">Lactate <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="lactate" aria-label="About lactate">?</button></span>
+              <span class="field-label" data-i18n="fieldLabelLactate">Lactate <span class="field-unit">mmol/L</span></span>
               <input type="text" inputmode="decimal" id="in_lactate" placeholder="0.4–1.8">
             </label>
           </div>
         </div>
         <div class="form-section">
-          <p class="form-section-title" data-i18n="formSectionElectrolytes">Electrolytes <span class="optional-tag" data-i18n="optionalTagAG">optional — unlocks anion gap, or enter it directly</span></p>
+          <p class="form-section-title" data-i18n="formSectionElectrolytes">Electrolytes <span class="optional-tag" data-i18n="optionalTagAG">optional; unlocks anion gap or enter directly</span></p>
           <div class="field-row">
             <label class="field" for="in_na">
               <span class="field-label">Na⁺ <span class="field-unit">mmol/L</span></span>
@@ -698,7 +706,7 @@ body.fs-xlarge{zoom:1.32;}
               <input type="text" inputmode="decimal" id="in_alb" placeholder="3.5–5.0">
             </label>
             <label class="field" for="in_ag">
-              <span class="field-label" data-i18n="fieldLabelAG">Anion gap <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="ag" aria-label="About anion gap">?</button></span>
+              <span class="field-label" data-i18n="fieldLabelAG">Anion gap <span class="field-unit">mmol/L</span></span>
               <input type="text" inputmode="decimal" id="in_ag" placeholder="10–16">
             </label>
           </div>
@@ -722,7 +730,13 @@ body.fs-xlarge{zoom:1.32;}
     <div class="cn-box" id="clinicalNoteBox" hidden>
       <div class="cn-section">
         <div class="cn-head">
-          <span class="cn-title" data-i18n="cnTitleNote">ABG — klinisk notat</span>
+          <span class="cn-title" data-i18n="cnTitleNote">ABG: klinisk notat</span>
+          <div class="cn-toggles">
+            <button type="button" class="cn-toggle cn-toggle-color active" id="cnToggleColor" title="Fargekoding" aria-pressed="true">■</button>
+            <button type="button" class="cn-toggle tk" id="cnToggleItalic" title="Kursiv" aria-pressed="false">K</button>
+            <button type="button" class="cn-toggle tf active" id="cnToggleBold"   title="Fet"    aria-pressed="true">F</button>
+            <button type="button" class="cn-toggle tu" id="cnToggleUnder"  title="Understrek" aria-pressed="false">U</button>
+          </div>
           <button type="button" class="cn-copy" id="cnCopyFull" data-i18n="cnCopy">Kopier</button>
         </div>
         <div class="cn-text" id="cnFullText"></div>
@@ -730,11 +744,6 @@ body.fs-xlarge{zoom:1.32;}
       <div class="cn-section">
         <div class="cn-head">
           <span class="cn-title" data-i18n="cnTitleAvvik">Avvik</span>
-          <div class="cn-toggles">
-            <button type="button" class="cn-toggle tk" id="cnToggleItalic" title="Kursiv" aria-pressed="false">K</button>
-            <button type="button" class="cn-toggle tf" id="cnToggleBold"   title="Fet"    aria-pressed="false">F</button>
-            <button type="button" class="cn-toggle tu" id="cnToggleUnder"  title="Understrek" aria-pressed="false">U</button>
-          </div>
           <button type="button" class="cn-copy" id="cnCopyAvvik" data-i18n="cnCopy">Kopier</button>
         </div>
         <div class="cn-text" id="cnAvvikText"></div>
@@ -745,7 +754,7 @@ body.fs-xlarge{zoom:1.32;}
     <div class="panel-head">
       <p class="eyebrow" data-i18n="tabCompensation">04 · Compensation</p>
       <h2 data-i18n="compH2">How the body answers back</h2>
-      <p class="panel-intro" data-i18n="compIntro">A primary acid–base disturbance triggers a predictable counter-response from whichever system isn't the primary problem — lungs answer the kidneys, kidneys answer the lungs. The body never fully overshoots into the opposite abnormality, and it rarely restores pH all the way to a perfect 7.40.</p>
+      <p class="panel-intro" data-i18n="compIntro">A primary acid–base disturbance triggers a predictable counter-response from whichever system isn't the primary problem: lungs answer the kidneys, kidneys answer the lungs. The body never fully overshoots into the opposite abnormality, and it rarely restores pH all the way to 7.40.</p>
     </div>
     <div class="comp-table-wrap">
       <table class="comp-table" id="compTable"></table>
@@ -756,7 +765,7 @@ body.fs-xlarge{zoom:1.32;}
     <div class="panel-head">
       <p class="eyebrow" data-i18n="tabSources">05 · Sources</p>
       <h2 data-i18n="sourcesH2">What this is built on</h2>
-      <p class="panel-intro" data-i18n="sourcesIntro">Reference ranges, compensation formulas, and the anion-gap teaching here reflect long-standing, widely replicated clinical physiology rather than any single proprietary text. The sources below are cited for attribution and further reading; no text from them is reproduced — everything on this page has been written and worded independently.</p>
+      <p class="panel-intro" data-i18n="sourcesIntro">Reference ranges, compensation formulas, and the anion-gap teaching here reflect long-standing, widely replicated clinical physiology rather than any single proprietary text. The sources below are cited for attribution and further reading.</p>
     </div>
     <ol class="source-list" id="sourceList"></ol>
     <div class="source-legal" id="sourceLegal"></div>
@@ -784,7 +793,7 @@ body.fs-xlarge{zoom:1.32;}
 <footer class="footer">
   <div class="wrap footer-inner">
     <p class="footer-disclaimer" data-i18n="footerDisclaimer"><strong>Educational tool, not a clinical device.</strong> Reference ranges and worked cases are illustrative teaching material. They are not validated for diagnosis or treatment, do not replace your institution's laboratory ranges or a supervising clinician, and should never be the sole basis for a patient-care decision.</p>
-    <p class="footer-meta" data-i18n="footerMeta">ABG Reader — built for learning blood gas interpretation.</p>
+    <p class="footer-meta" data-i18n="footerMeta">ABG Reader: blodgasstolkning.</p>
   </div>
 </footer>
 
@@ -799,12 +808,11 @@ const UI_STRINGS = {
     brandSub:"blood gas trainer",
     settingsTitle:"Settings",
     settingsLanguage:"Language",
+    settingsSymbol:"Flag symbol",
     settingsLanguageNote:"Norwegian terminology is checked against Store medisinske leksikon, Helsebiblioteket, and NEL.",
     settingsFont:"Font",
     settingsFontSize:"Text size",
-    heroEyebrow:"For students &amp; clinicians",
-    heroH1:"Read an arterial blood gas.",
-    heroLede:"Eight parameters, eleven worked presets, and a step-by-step analyzer that shows its reasoning — including how the body compensates for respiratory and metabolic disorders, and when compensation stops adding up.",
+    heroH1:"Arteriell blodgass",
     heroBtnPresets:"Browse presets",
     heroBtnAnalyzer:"Open the analyzer",
     flagLow:"▼ LOW", flagHigh:"▲ HIGH", flagNorm:"● NORM",
@@ -813,33 +821,33 @@ const UI_STRINGS = {
     tabCompensation:"04 · Compensation", tabSources:"05 · Sources",
     refH2:"Parameters, one at a time",
     refIntro:'Each card carries the typical adult arterial reference range. Tap the <strong>?</strong> to open what a high value, a low value, or a deceptively normal value usually means.',
-    refElectrolyteEyebrow:"Supporting electrolytes — used for the anion gap",
+    refElectrolyteEyebrow:"Supporting electrolytes: used for the anion gap",
     presetsH2:"Eleven worked cases",
     presetsIntro:"Common single disorders, their compensated counterparts, and two classic mixed pictures. Open any case in the analyzer to see the reasoning rebuilt step by step.",
     analyzerH2:"Enter a gas, see the reasoning",
-    analyzerIntro:"Fill in what you have — pH, pCO₂ and HCO₃⁻ are the minimum. Electrolytes unlock the anion gap, or enter the anion gap directly if that's all you have; pO₂ unlocks an oxygenation note.",
+    analyzerIntro:"Fill in what you have: pH, pCO₂ and HCO₃⁻ are the minimum. Electrolytes unlock the anion gap, or enter the anion gap directly if that's all you have; pO₂ unlocks an oxygenation note.",
     formSectionAcidBase:"Acid–base",
-    fieldLabelBE:'Base excess <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="be" aria-label="About base excess">?</button>',
+    fieldLabelBE:'Base excess <span class="field-unit">mmol/L</span>',
     formSectionOxy:'Oxygenation <span class="optional-tag" data-i18n="optionalTag">optional</span>',
     optionalTag:"optional",
-    fieldLabelLactate:'Lactate <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="lactate" aria-label="About lactate">?</button>',
-    formSectionElectrolytes:'Electrolytes <span class="optional-tag" data-i18n="optionalTagAG">optional — unlocks anion gap</span>',
-    optionalTagAG:"optional — unlocks anion gap, or enter it directly",
+    fieldLabelLactate:'Lactate <span class="field-unit">mmol/L</span>',
+    formSectionElectrolytes:'Electrolytes <span class="optional-tag" data-i18n="optionalTagAG">optional; unlocks anion gap</span>',
+    optionalTagAG:"optional; unlocks anion gap or enter directly",
     fieldLabelAlbumin:'Albumin <span class="field-unit">g/dL</span>',
-    fieldLabelAG:'Anion gap <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="ag" aria-label="About anion gap">?</button>',
+    fieldLabelAG:'Anion gap <span class="field-unit">mmol/L</span>',
     agFieldNote:"If Na⁺ and Cl⁻ are filled in, the anion gap is calculated from them and this field is ignored. Leave Na⁺/Cl⁻ blank to use a directly entered anion gap instead.",
     btnAnalyze:"Analyze", btnClear:"Clear",
     reportEmptyEyebrow:"Awaiting values",
     reportEmptyText:"Run a case from the Presets tab, or enter your own numbers and press Analyze. The reasoning will print here, line by line, the way a worked answer would.",
     compH2:"How the body answers back",
-    compIntro:"A primary acid–base disturbance triggers a predictable counter-response from whichever system isn't the primary problem — lungs answer the kidneys, kidneys answer the lungs. The body never fully overshoots into the opposite abnormality, and it rarely restores pH all the way to a perfect 7.40.",
+    compIntro:"A primary acid–base disturbance triggers a predictable counter-response from whichever system isn't the primary problem: lungs answer the kidneys, kidneys answer the lungs. The body never fully overshoots into the opposite abnormality, and it rarely restores pH all the way to 7.40.",
     sourcesH2:"What this is built on",
-    sourcesIntro:"Reference ranges, compensation formulas, and the anion-gap teaching here reflect long-standing, widely replicated clinical physiology rather than any single proprietary text. The sources below are cited for attribution and further reading; no text from them is reproduced — everything on this page has been written and worded independently.",
+    sourcesIntro:"Reference ranges, compensation formulas, and the anion-gap teaching here reflect long-standing, widely replicated clinical physiology rather than any single proprietary text. The sources below are cited for attribution and further reading.",
     footerDisclaimer:"<strong>Educational tool, not a clinical device.</strong> Reference ranges and worked cases are illustrative teaching material. They are not validated for diagnosis or treatment, do not replace your institution's laboratory ranges or a supervising clinician, and should never be the sole basis for a patient-care decision.",
-    footerMeta:"ABG Reader — built for learning blood gas interpretation.",
+    footerMeta:"ABG Reader: blodgasstolkning.",
     analyzerHintRequired:"pH, pCO₂, and HCO₃⁻ are required to run the analysis.",
     analyzerHintMissing:"Required: ",
-    cnTitleNote:"ABG — clinical note",
+    cnTitleNote:"ABG: clinical note",
     cnTitleAvvik:"Abnormal findings",
     cnCopy:"Copy",
     cnCopied:"Copied!",
@@ -853,12 +861,11 @@ const UI_STRINGS = {
     brandSub:"blodgasstrener",
     settingsTitle:"Innstillinger",
     settingsLanguage:"Språk",
+    settingsSymbol:"Avvikmarkering",
     settingsLanguageNote:"Norsk terminologi er kontrollert mot Store medisinske leksikon, Helsebiblioteket og NEL.",
     settingsFont:"Skrift",
     settingsFontSize:"Tekststørrelse",
-    heroEyebrow:"prototype",
-    heroH1:"Les en arteriell blodgass",
-    heroLede:"Åtte parametre, elleve gjennomgåtte kasus, og en analysator som viser resonnementet steg for steg — inkludert hvordan kroppen kompenserer for respiratoriske og metabolske forstyrrelser, og når kompensasjonen ikke lenger går opp.",
+    heroH1:"Arteriell blodgass",
     heroBtnPresets:"Se kasus",
     heroBtnAnalyzer:"Åpne analysatoren",
     flagLow:"▼ LAV", flagHigh:"▲ HØY", flagNorm:"● NORM",
@@ -867,33 +874,33 @@ const UI_STRINGS = {
     tabCompensation:"04 · Kompensasjon", tabSources:"05 · Kilder",
     refH2:"Parametre, ett om gangen",
     refIntro:'Hvert kort viser det vanlige arterielle referanseområdet for voksne. Trykk på <strong>?</strong> for å se hva en høy, en lav, eller en bedragersk normal verdi vanligvis betyr.',
-    refElectrolyteEyebrow:"Støtteelektrolytter — brukt til anion gap",
+    refElectrolyteEyebrow:"Støtteelektrolytter: brukt til anion gap",
     presetsH2:"Elleve gjennomgåtte kasus",
     presetsIntro:"Vanlige enkeltforstyrrelser, deres kompenserte motstykker, og to klassiske blandede bilder. Åpne et hvilket som helst kasus i analysatoren for å se resonnementet bygget opp steg for steg.",
     analyzerH2:"Tast inn en blodgass, se resonnementet",
-    analyzerIntro:"Fyll inn det du har — pH, pCO₂ og HCO₃⁻ er minimum. Elektrolytter låser opp anion gap, eller tast inn anion gap direkte hvis det er alt du har; pO₂ låser opp en oksygeneringsvurdering.",
+    analyzerIntro:"Fyll inn det du har: pH, pCO₂ og HCO₃⁻ er minimum. Elektrolytter låser opp anion gap, eller tast inn anion gap direkte hvis det er alt du har; pO₂ låser opp en oksygeneringsvurdering.",
     formSectionAcidBase:"Syre–base",
-    fieldLabelBE:'Base excess <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="be" aria-label="Om base excess">?</button>',
+    fieldLabelBE:'Base excess <span class="field-unit">mmol/L</span>',
     formSectionOxy:'Oksygenering <span class="optional-tag" data-i18n="optionalTag">valgfritt</span>',
     optionalTag:"valgfritt",
-    fieldLabelLactate:'Laktat <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="lactate" aria-label="Om laktat">?</button>',
-    formSectionElectrolytes:'Elektrolytter <span class="optional-tag" data-i18n="optionalTagAG">valgfritt — låser opp anion gap</span>',
-    optionalTagAG:"valgfritt — låser opp anion gap, eller tast det inn direkte",
+    fieldLabelLactate:'Laktat <span class="field-unit">mmol/L</span>',
+    formSectionElectrolytes:'Elektrolytter <span class="optional-tag" data-i18n="optionalTagAG">valgfritt; låser opp anion gap</span>',
+    optionalTagAG:"valgfritt; låser opp anion gap eller tast direkte",
     fieldLabelAlbumin:'Albumin <span class="field-unit">g/dL</span>',
-    fieldLabelAG:'Anion gap <span class="field-unit">mmol/L</span> <button type="button" class="info-btn" tabindex="-1" data-param="ag" aria-label="Om anion gap">?</button>',
+    fieldLabelAG:'Anion gap <span class="field-unit">mmol/L</span>',
     agFieldNote:"Hvis Na⁺ og Cl⁻ er fylt ut, beregnes anion gap fra dem og dette feltet ignoreres. La Na⁺/Cl⁻ stå tomt for å bruke et direkte innskrevet anion gap i stedet.",
     btnAnalyze:"Analyser", btnClear:"Tøm",
     reportEmptyEyebrow:"Venter på verdier",
     reportEmptyText:"Kjør et kasus fra Kasus-fanen, eller tast inn egne tall og trykk Analyser. Resonnementet skrives ut her, linje for linje, slik en gjennomgått besvarelse ville sett ut.",
     compH2:"Slik svarer kroppen",
-    compIntro:"En primær syre-baseforstyrrelse utløser en forutsigbar motrespons fra det systemet som ikke er hovedproblemet — lungene svarer på nyrene, nyrene svarer på lungene. Kroppen overkompenserer så godt som aldri i motsatt retning, og den gjenoppretter sjelden pH helt til et perfekt 7,40.",
+    compIntro:"En primær syre-baseforstyrrelse utløser en forutsigbar motrespons fra det systemet som ikke er hovedproblemet: lungene svarer på nyrene, nyrene svarer på lungene. Kroppen overkompenserer så godt som aldri i motsatt retning, og den gjenoppretter sjelden pH helt til et perfekt 7,40.",
     sourcesH2:"Hva dette er bygget på",
-    sourcesIntro:"Referanseområdene, kompensasjonsformlene og undervisningen om anion gap her gjenspeiler langvarig, mye etterprøvd klinisk fysiologi fremfor én enkelt kilde. Kildene under er oppgitt for etterrettelighet og videre lesning; ingen tekst fra dem er gjengitt — alt på denne siden er skrevet og formulert selvstendig.",
+    sourcesIntro:"Referanseområdene, kompensasjonsformlene og undervisningen om anion gap her gjenspeiler langvarig, mye etterprøvd klinisk fysiologi fremfor én enkelt kilde. Kildene under er oppgitt for etterrettelighet og videre lesning.",
     footerDisclaimer:"<strong>Pedagogisk verktøy, ikke et klinisk hjelpemiddel.</strong> Referanseområder og gjennomgåtte kasus er illustrerende undervisningsmateriell. De er ikke validert for diagnostikk eller behandling, erstatter ikke din institusjons laboratorieverdier eller en ansvarlig kliniker, og skal aldri være eneste grunnlag for en pasientbehandlingsbeslutning.",
-    footerMeta:"ABG Reader — laget for å lære blodgasstolkning.",
+    footerMeta:"ABG Reader: blodgasstolkning.",
     analyzerHintRequired:"pH, pCO₂ og HCO₃⁻ må fylles ut for å kjøre analysen.",
     analyzerHintMissing:"Påkrevd: ",
-    cnTitleNote:"Blodgass — klinisk notat",
+    cnTitleNote:"Blodgass: klinisk notat",
     cnTitleAvvik:"Avvik",
     cnCopy:"Kopier",
     cnCopied:"Kopiert!",
@@ -911,8 +918,8 @@ const PARAMS_EN = {
     name:"pH", abbr:"Acidity", unit:"", order:0,
     normalText:"7.35 – 7.45",
     desc:"The free hydrogen-ion concentration of the blood. Everything else on this page exists to explain why this one number is where it is.",
-    high:"Alkalemia. Look for a respiratory cause (hyperventilation, low pCO₂) or a metabolic cause (bicarbonate excess — vomiting, diuretics, contraction alkalosis).",
-    low:"Acidemia. Look for a respiratory cause (hypoventilation, high pCO₂) or a metabolic cause (acid gain or bicarbonate loss — ketoacidosis, lactic acidosis, renal failure, diarrhea).",
+    high:"Alkalemia. Look for a respiratory cause (hyperventilation, low pCO₂) or a metabolic cause (bicarbonate excess: vomiting, diuretics, contraction alkalosis).",
+    low:"Acidemia. Look for a respiratory cause (hypoventilation, high pCO₂) or a metabolic cause (acid gain or bicarbonate loss: ketoacidosis, lactic acidosis, renal failure, diarrhea).",
     normalNote:"A normal pH does not rule out an acid–base disorder. It can mean a single disorder has been fully compensated, or that two opposite primary disorders are cancelling each other out. Always check pCO₂ and HCO₃⁻ even when pH looks fine.",
     links:[
       {label:"Sunde, S. (u.å.). pH. Store norske leksikon.", url:"https://snl.no/pH"},
@@ -925,9 +932,9 @@ const PARAMS_EN = {
     name:"pCO₂", abbr:"Arterial CO₂ tension", unit:"pressure", order:1,
     normalMmHg:[35.3,47.3],
     desc:"The partial pressure of carbon dioxide, set almost entirely by alveolar ventilation. This is the lungs' half of the acid–base equation, and it can move within minutes.",
-    high:"Hypoventilation — respiratory acidosis. Causes include COPD, opioid or sedative overdose, neuromuscular weakness, severe obesity, or airway obstruction. Can also be an appropriate compensatory response retaining CO₂ for a primary metabolic alkalosis.",
-    low:"Hyperventilation — respiratory alkalosis. Causes include anxiety, pain, fever, pulmonary embolism, early sepsis, salicylate toxicity, or pregnancy. Can also be an appropriate compensatory response blowing off CO₂ for a primary metabolic acidosis.",
-    normalNote:"Ask whether 'normal' is actually appropriate for this patient. A tiring asthmatic whose pCO₂ is climbing back toward normal after being low is not reassuring — it can signal impending respiratory failure, not recovery.",
+    high:"Hypoventilation: respiratory acidosis. Causes include COPD, opioid or sedative overdose, neuromuscular weakness, severe obesity, or airway obstruction. Can also be an appropriate compensatory response retaining CO₂ for a primary metabolic alkalosis.",
+    low:"Hyperventilation: respiratory alkalosis. Causes include anxiety, pain, fever, pulmonary embolism, early sepsis, salicylate toxicity, or pregnancy. Can also be an appropriate compensatory response blowing off CO₂ for a primary metabolic acidosis.",
+    normalNote:"Ask whether 'normal' is actually appropriate for this patient. A tiring asthmatic whose pCO₂ is climbing back toward normal after being low is not reassuring: it can signal impending respiratory failure, not recovery.",
     links:[
       {label:"Kierulf, P. & Nordseth, T. (u.å.). Karbondioksid: i kroppen. Store medisinske leksikon.", url:"https://sml.snl.no/karbondioksid_-_i_kroppen"},
       {label:"Nordseth, T. (u.å.). Acidose. Store medisinske leksikon.", url:"https://sml.snl.no/acidose"},
@@ -938,9 +945,9 @@ const PARAMS_EN = {
     name:"HCO₃⁻", abbr:"Bicarbonate", unit:"conc", order:2,
     normalText:"22 – 26 mmol/L",
     desc:"The kidneys' buffer, regulated over hours to days. This is the metabolic half of the acid–base equation and the slower of the two systems to move.",
-    high:"Metabolic alkalosis — vomiting, nasogastric suction, diuretics, contraction alkalosis, mineralocorticoid excess. Can also reflect renal compensation for a chronic respiratory acidosis.",
-    low:"Metabolic acidosis — diabetic ketoacidosis, lactic acidosis, diarrhea, renal tubular acidosis, renal failure, toxic alcohol or salicylate ingestion. Can also reflect renal compensation for a chronic respiratory alkalosis.",
-    normalNote:"A normal HCO₃⁻ alongside an abnormal pH points toward an acute respiratory process — the kidneys haven't had the three to five days they typically need to respond.",
+    high:"Metabolic alkalosis: vomiting, nasogastric suction, diuretics, contraction alkalosis, mineralocorticoid excess. Can also reflect renal compensation for a chronic respiratory acidosis.",
+    low:"Metabolic acidosis: diabetic ketoacidosis, lactic acidosis, diarrhea, renal tubular acidosis, renal failure, toxic alcohol or salicylate ingestion. Can also reflect renal compensation for a chronic respiratory alkalosis.",
+    normalNote:"A normal HCO₃⁻ alongside an abnormal pH points toward an acute respiratory process: the kidneys haven't had the three to five days they typically need to respond.",
     links:[
       {label:"Pedersen, B. (u.å.). Bikarbonater. Store medisinske leksikon.", url:"https://sml.snl.no/bikarbonater"},
       {label:"Nordseth, T. (u.å.). Syre-baseregulering. Store medisinske leksikon.", url:"https://sml.snl.no/syre-baseregulering"},
@@ -951,8 +958,8 @@ const PARAMS_EN = {
     name:"Base Excess", abbr:"Standard base excess", unit:"conc", order:3,
     normalText:"−3 to +3 mmol/L",
     desc:"A calculated value: the amount of acid or base that would titrate this blood back to pH 7.40 at a pCO₂ of 40 mmHg. It is built specifically to isolate the metabolic component from the respiratory one.",
-    high:"A base surplus — metabolic alkalosis, or renal compensation for a chronic respiratory acidosis.",
-    low:"A base deficit — metabolic acidosis, or renal compensation for a chronic respiratory alkalosis.",
+    high:"A base surplus: metabolic alkalosis, or renal compensation for a chronic respiratory acidosis.",
+    low:"A base deficit: metabolic acidosis, or renal compensation for a chronic respiratory alkalosis.",
     normalNote:"Suggests the metabolic component is undisturbed. If pH is still abnormal with a normal base excess, the problem is primarily respiratory.",
     links:[
       {label:"Nordseth, T. (u.å.). Syre-baseregulering. Store medisinske leksikon.", url:"https://sml.snl.no/syre-baseregulering"},
@@ -963,10 +970,10 @@ const PARAMS_EN = {
   po2: {
     name:"pO₂", abbr:"Arterial O₂ tension", unit:"pressure", order:4,
     normalMmHg:[75,105],
-    desc:"The partial pressure of dissolved oxygen — a measure of gas exchange, not ventilation. Falls gradually with age even in healthy lungs.",
+    desc:"The partial pressure of dissolved oxygen: a measure of gas exchange, not ventilation. Falls gradually with age even in healthy lungs.",
     high:"Usually just supplemental oxygen. Rarely significant on its own outside specific settings like hyperbaric therapy.",
-    low:"Hypoxemia — V/Q mismatch, shunt, diffusion limitation, hypoventilation, or low inspired oxygen (altitude). Interpret relative to FiO₂, not in isolation.",
-    normalNote:"A normal pO₂ on room air is reassuring, but a normal pO₂ on a high FiO₂ can still represent significant lung disease — always read pO₂ against the oxygen the patient is actually receiving.",
+    low:"Hypoxemia: V/Q mismatch, shunt, diffusion limitation, hypoventilation, or low inspired oxygen (altitude). Interpret relative to FiO₂, not in isolation.",
+    normalNote:"A normal pO₂ on room air is reassuring, but a normal pO₂ on a high FiO₂ can still represent significant lung disease: always read pO₂ against the oxygen the patient is actually receiving.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
       {label:"Berend, K. et al. (2014). N Engl J Med, 371(15), 1434.", url:"https://doi.org/10.1056/NEJMra1003327"},
@@ -977,9 +984,9 @@ const PARAMS_EN = {
     name:"SaO₂", abbr:"Oxygen saturation", unit:"%", order:5,
     normalText:"97.5–99.9 %",
     desc:"The percentage of hemoglobin carrying oxygen, related to pO₂ by the sigmoid oxyhemoglobin dissociation curve rather than a straight line.",
-    high:"Not generally pathological — usually reflects supplemental oxygen.",
+    high:"Not generally pathological: usually reflects supplemental oxygen.",
     low:"Hypoxemia. Because the curve is steep below roughly 60 mmHg pO₂, saturation can fall sharply once it starts dropping.",
-    normalNote:"A normal SaO₂ can sit on the flat top of the curve while pO₂ is already falling — saturation is a late warning sign. It is also unreliable in carbon monoxide poisoning and methemoglobinemia, where pulse oximetry overreads.",
+    normalNote:"A normal SaO₂ can sit on the flat top of the curve while pO₂ is already falling: saturation is a late warning sign. It is also unreliable in carbon monoxide poisoning and methemoglobinemia, where pulse oximetry overreads.",
     links:[
       {label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"},
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
@@ -1002,9 +1009,9 @@ const PARAMS_EN = {
   ag: {
     name:"Anion Gap", abbr:"Na⁺ − (Cl⁻ + HCO₃⁻)", unit:"conc", order:7,
     normalText:"10–16 mmol/L",
-    desc:"Estimates unmeasured anions in the blood. It exists to split metabolic acidosis into two mechanistically different buckets — and it depends on the Na⁺, Cl⁻, and HCO₃⁻ shown below.",
-    high:"Unmeasured acid anions are present — ketoacidosis, lactic acidosis, uremia/renal failure, or toxic ingestions (methanol, ethylene glycol, salicylates). Often grouped under the mnemonic GOLDMARK.",
-    low:"Usually a normal-anion-gap (hyperchloremic) acidosis instead — bicarbonate is lost directly or diluted while chloride rises to compensate, as in diarrhea, renal tubular acidosis, or large-volume saline resuscitation.",
+    desc:"Estimates unmeasured anions in the blood. It exists to split metabolic acidosis into two mechanistically different buckets: and it depends on the Na⁺, Cl⁻, and HCO₃⁻ shown below.",
+    high:"Unmeasured acid anions are present: ketoacidosis, lactic acidosis, uremia/renal failure, or toxic ingestions (methanol, ethylene glycol, salicylates). Often grouped under the mnemonic GOLDMARK.",
+    low:"Usually a normal-anion-gap (hyperchloremic) acidosis instead: bicarbonate is lost directly or diluted while chloride rises to compensate, as in diarrhea, renal tubular acidosis, or large-volume saline resuscitation.",
     normalNote:"Correct for albumin before trusting a normal gap: each 1 g/dL drop in albumin below 4 g/dL lowers the expected gap by about 2.5 mmol/L, which can mask a real elevation in hypoalbuminemic patients.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
@@ -1016,8 +1023,8 @@ const PARAMS_EN = {
     name:"Hb (blood gas)", abbr:"Hemoglobin", unit:"conc", order:8,
     normalText:"11.0–17.0 g/dL",
     desc:"Hemoglobin measured on the blood gas analyser. Gives a rapid bedside estimate, though values from dedicated haematology analysers should be used for final clinical decisions.",
-    high:"Polycythemia — dehydration, primary polycythemia vera, chronic hypoxia (high altitude, COPD, cyanotic heart disease).",
-    low:"Anaemia — bleeding, haemolysis, bone marrow failure, chronic disease, nutritional deficiency.",
+    high:"Polycythemia: dehydration, primary polycythemia vera, chronic hypoxia (high altitude, COPD, cyanotic heart disease).",
+    low:"Anaemia: bleeding, haemolysis, bone marrow failure, chronic disease, nutritional deficiency.",
     normalNote:"Blood gas analyser Hb can differ from the haematology analyser value. In critical situations, treat the clinical picture rather than anchoring on a single number from one device.",
     links:[
       {label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"},
@@ -1030,7 +1037,7 @@ const PARAMS_EN = {
     desc:"The fraction of hemoglobin actually carrying oxygen, measured directly by co-oximetry. This is distinct from SaO₂ in that it excludes dyshemoglobins.",
     high:"Supplemental oxygen.",
     low:"Hypoxemia, or displacement by dyshemoglobins (COHb, MetHb). A low O₂Hb with a 'normal' SaO₂ from pulse oximetry should raise suspicion of CO poisoning or methemoglobinaemia.",
-    normalNote:"Lower than pulse-oximetry SaO₂ in CO poisoning — because pulse oximetry cannot distinguish oxyhemoglobin from carboxyhemoglobin.",
+    normalNote:"Lower than pulse-oximetry SaO₂ in CO poisoning: because pulse oximetry cannot distinguish oxyhemoglobin from carboxyhemoglobin.",
     links:[
       {label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"},
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"}
@@ -1040,9 +1047,9 @@ const PARAMS_EN = {
     name:"COHb", abbr:"Carboxyhemoglobin", unit:"%", order:10,
     normalText:"< 1.5 %",
     desc:"Hemoglobin bound to carbon monoxide. CO binds hemoglobin ~250 times more avidly than oxygen, blocking O₂ delivery even when pO₂ looks normal.",
-    high:"CO poisoning — house fires, faulty heating systems, exhaust exposure. Smokers typically have 3–10%. Above 20–25% produces severe symptoms; above 50% can be fatal.",
+    high:"CO poisoning: house fires, faulty heating systems, exhaust exposure. Smokers typically have 3–10%. Above 20–25% produces severe symptoms; above 50% can be fatal.",
     low:"Not clinically relevant.",
-    normalNote:"Pulse oximetry is unreliable in CO poisoning — SpO₂ reads falsely normal. Only co-oximetry on a blood gas sample reveals COHb. Always request blood gas (not just pulse ox) if CO exposure is suspected.",
+    normalNote:"Pulse oximetry is unreliable in CO poisoning: SpO₂ reads falsely normal. Only co-oximetry on a blood gas sample reveals COHb. Always request blood gas (not just pulse ox) if CO exposure is suspected.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
       {label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}
@@ -1051,8 +1058,8 @@ const PARAMS_EN = {
   methb: {
     name:"MetHb", abbr:"Methemoglobin", unit:"%", order:11,
     normalText:"< 2.0 %",
-    desc:"Hemoglobin with iron oxidised to Fe³⁺, unable to bind oxygen. Caused by oxidising agents — dapsone, nitrates, benzocaine, prilocaine are the most common culprits.",
-    high:"Methemoglobinaemia — drugs (dapsone, nitrates, local anaesthetics), congenital deficiency of methaemoglobin reductase. Above 20–30% causes symptoms (cyanosis, confusion); above 70% is life-threatening.",
+    desc:"Hemoglobin with iron oxidised to Fe³⁺, unable to bind oxygen. Caused by oxidising agents: dapsone, nitrates, benzocaine, prilocaine are the most common culprits.",
+    high:"Methemoglobinaemia: drugs (dapsone, nitrates, local anaesthetics), congenital deficiency of methaemoglobin reductase. Above 20–30% causes symptoms (cyanosis, confusion); above 70% is life-threatening.",
     low:"Not clinically relevant.",
     normalNote:"Pulse oximetry reads MetHb as approximately 85% regardless of true saturation. A 'saturation gap' (SpO₂ minus SaO₂) suggests dyshemoglobinaemia. Brown blood that does not turn red on exposure to air is a clinical clue.",
     links:[
@@ -1063,8 +1070,8 @@ const PARAMS_EN = {
   deoxyhb: {
     name:"Deoxy-Hb", abbr:"Deoxyhemoglobin", unit:"%", order:12,
     normalText:"0–5.0 %",
-    desc:"Hemoglobin without oxygen bound — the returning, 'used' form. Normally a small fraction in arterial blood.",
-    high:"Hypoxemia or reduced cardiac output — venous blood inadvertently sampled, or severe arterial hypoxaemia.",
+    desc:"Hemoglobin without oxygen bound: the returning, 'used' form. Normally a small fraction in arterial blood.",
+    high:"Hypoxemia or reduced cardiac output: venous blood inadvertently sampled, or severe arterial hypoxaemia.",
     low:"Not clinically relevant.",
     normalNote:"In a true arterial sample, deoxyhemoglobin above about 5% suggests significant hypoxaemia. Also rises if the sample was collected venously or mixed.",
     links:[
@@ -1074,10 +1081,10 @@ const PARAMS_EN = {
   ca_ion: {
     name:"Ca²⁺ (ionised)", abbr:"Ionised calcium", unit:"conc", order:13,
     normalText:"1.10–1.34 mmol/L",
-    desc:"The biologically active, freely circulating fraction of calcium. Total serum calcium is roughly half bound to albumin — ionised calcium is what actually matters physiologically.",
-    high:"Hypercalcaemia — primary hyperparathyroidism, malignancy (lytic bone mets, PTHrP), excess vitamin D, sarcoidosis, thiazide diuretics.",
-    low:"Hypocalcaemia — hypoparathyroidism, pancreatitis, massive transfusion (citrate binds calcium), vitamin D deficiency, alkalosis (reduces ionised fraction), rhabdomyolysis.",
-    normalNote:"pH directly affects ionised calcium: alkalosis lowers it (calcium binds more albumin) and acidosis raises it. Always interpret alongside pH. Albumin-corrected total calcium is an inferior surrogate — measure ionised directly whenever possible.",
+    desc:"The biologically active, freely circulating fraction of calcium. Total serum calcium is roughly half bound to albumin: ionised calcium is what actually matters physiologically.",
+    high:"Hypercalcaemia: primary hyperparathyroidism, malignancy (lytic bone mets, PTHrP), excess vitamin D, sarcoidosis, thiazide diuretics.",
+    low:"Hypocalcaemia: hypoparathyroidism, pancreatitis, massive transfusion (citrate binds calcium), vitamin D deficiency, alkalosis (reduces ionised fraction), rhabdomyolysis.",
+    normalNote:"pH directly affects ionised calcium: alkalosis lowers it (calcium binds more albumin) and acidosis raises it. Always interpret alongside pH. Albumin-corrected total calcium is an inferior surrogate: measure ionised directly whenever possible.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
       {label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}
@@ -1087,8 +1094,8 @@ const PARAMS_EN = {
     name:"Glucose", abbr:"Blood glucose", unit:"conc", order:14,
     normalText:"4.2–6.3 mmol/L",
     desc:"Blood glucose measured on the blood gas analyser. Clinically useful in the context of diabetic ketoacidosis, hypoglycaemia, or critical illness where rapid point-of-care results are needed.",
-    high:"Hyperglycaemia — diabetes, physiological stress response, corticosteroids, total parenteral nutrition, pancreatitis.",
-    low:"Hypoglycaemia — insulin excess, sulfonylureas, liver failure, sepsis, adrenal insufficiency.",
+    high:"Hyperglycaemia: diabetes, physiological stress response, corticosteroids, total parenteral nutrition, pancreatitis.",
+    low:"Hypoglycaemia: insulin excess, sulfonylureas, liver failure, sepsis, adrenal insufficiency.",
     normalNote:"Blood gas analysers measure whole-blood glucose, which is approximately 10–15% lower than plasma glucose. A bedside glucose meter should also be checked for critical values. Normal fasting: 4.0–6.0 mmol/L.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
@@ -1103,8 +1110,8 @@ const PARAMS_NO = {
     name:"pH", abbr:"Surhetsgrad", unit:"", order:0,
     normalText:"7,35 – 7,45",
     desc:"Blodets frie konsentrasjon av hydrogenioner. Alt annet på denne siden finnes for å forklare hvorfor akkurat dette tallet ligger der det ligger.",
-    high:"Alkalemi. Se etter en respiratorisk årsak (hyperventilering, lav pCO₂) eller en metabolsk årsak (baseoverskudd — oppkast, diuretika, kontraksjonsalkalose).",
-    low:"Acidemi. Se etter en respiratorisk årsak (hypoventilering, høy pCO₂) eller en metabolsk årsak (syretilskudd eller bikarbonattap — ketoacidose, laktacidose, nyresvikt, diaré).",
+    high:"Alkalemi. Se etter en respiratorisk årsak (hyperventilering, lav pCO₂) eller en metabolsk årsak (baseoverskudd: oppkast, diuretika, kontraksjonsalkalose).",
+    low:"Acidemi. Se etter en respiratorisk årsak (hypoventilering, høy pCO₂) eller en metabolsk årsak (syretilskudd eller bikarbonattap: ketoacidose, laktacidose, nyresvikt, diaré).",
     normalNote:"En normal pH utelukker ikke en syre-baseforstyrrelse. Den kan bety at én forstyrrelse er fullt kompensert, eller at to motsatt rettede primærforstyrrelser opphever hverandre. Sjekk alltid pCO₂ og HCO₃⁻ selv om pH ser fin ut.",
     links:[
       {label:"Sunde, S. (u.å.). pH. Store norske leksikon.", url:"https://snl.no/pH"},
@@ -1117,9 +1124,9 @@ const PARAMS_NO = {
     name:"pCO₂", abbr:"Arterielt CO₂-trykk", unit:"pressure", order:1,
     normalMmHg:[35.3,47.3],
     desc:"Partialtrykket av karbondioksid, styrt nesten utelukkende av alveolær ventilasjon. Dette er lungenes del av syre-baseregnskapet, og det kan endre seg i løpet av minutter.",
-    high:"Hypoventilering — respiratorisk acidose. Årsaker er blant annet KOLS, overdose av opioider eller sedativa, nevromuskulær svakhet, alvorlig overvekt eller luftveisobstruksjon. Kan også være en hensiktsmessig kompensasjon der CO₂ holdes tilbake for en primær metabolsk alkalose.",
-    low:"Hyperventilering — respiratorisk alkalose. Årsaker er blant annet angst, smerte, feber, lungeemboli, tidlig sepsis, salisylatforgiftning eller graviditet. Kan også være en hensiktsmessig kompensasjon der CO₂ ventileres ut for en primær metabolsk acidose.",
-    normalNote:"Spør om 'normal' faktisk er forventet for denne pasienten. En astmapasient som blir sliten og hvis pCO₂ stiger tilbake mot normalen etter å ha vært lav, er ikke nødvendigvis bedre — det kan varsle truende respirasjonssvikt, ikke bedring.",
+    high:"Hypoventilering: respiratorisk acidose. Årsaker er blant annet KOLS, overdose av opioider eller sedativa, nevromuskulær svakhet, alvorlig overvekt eller luftveisobstruksjon. Kan også være en hensiktsmessig kompensasjon der CO₂ holdes tilbake for en primær metabolsk alkalose.",
+    low:"Hyperventilering: respiratorisk alkalose. Årsaker er blant annet angst, smerte, feber, lungeemboli, tidlig sepsis, salisylatforgiftning eller graviditet. Kan også være en hensiktsmessig kompensasjon der CO₂ ventileres ut for en primær metabolsk acidose.",
+    normalNote:"Spør om 'normal' faktisk er forventet for denne pasienten. En astmapasient som blir sliten og hvis pCO₂ stiger tilbake mot normalen etter å ha vært lav, er ikke nødvendigvis bedre: det kan varsle truende respirasjonssvikt, ikke bedring.",
     links:[
       {label:"Kierulf, P. & Nordseth, T. (u.å.). Karbondioksid: i kroppen. Store medisinske leksikon.", url:"https://sml.snl.no/karbondioksid_-_i_kroppen"},
       {label:"Nordseth, T. (u.å.). Acidose. Store medisinske leksikon.", url:"https://sml.snl.no/acidose"},
@@ -1130,9 +1137,9 @@ const PARAMS_NO = {
     name:"HCO₃⁻", abbr:"Bikarbonat", unit:"conc", order:2,
     normalText:"22 – 26 mmol/L",
     desc:"Nyrenes buffer, regulert over timer til dager. Dette er den metabolske halvdelen av syre-baseregnskapet, og det treigeste av de to systemene.",
-    high:"Metabolsk alkalose — oppkast, ventrikkelsondering, diuretika, kontraksjonsalkalose, mineralokortikoidoverskudd. Kan også reflektere renal kompensasjon for en kronisk respiratorisk acidose.",
-    low:"Metabolsk acidose — diabetisk ketoacidose, laktacidose, diaré, renal tubulær acidose, nyresvikt, forgiftning med toksiske alkoholer eller salisylater. Kan også reflektere renal kompensasjon for en kronisk respiratorisk alkalose.",
-    normalNote:"En normal HCO₃⁻ sammen med en avvikende pH peker mot en akutt respiratorisk prosess — nyrene har ennå ikke fått de tre til fem dagene de vanligvis trenger for å respondere.",
+    high:"Metabolsk alkalose: oppkast, ventrikkelsondering, diuretika, kontraksjonsalkalose, mineralokortikoidoverskudd. Kan også reflektere renal kompensasjon for en kronisk respiratorisk acidose.",
+    low:"Metabolsk acidose: diabetisk ketoacidose, laktacidose, diaré, renal tubulær acidose, nyresvikt, forgiftning med toksiske alkoholer eller salisylater. Kan også reflektere renal kompensasjon for en kronisk respiratorisk alkalose.",
+    normalNote:"En normal HCO₃⁻ sammen med en avvikende pH peker mot en akutt respiratorisk prosess: nyrene har ennå ikke fått de tre til fem dagene de vanligvis trenger for å respondere.",
     links:[
       {label:"Pedersen, B. (u.å.). Bikarbonater. Store medisinske leksikon.", url:"https://sml.snl.no/bikarbonater"},
       {label:"Nordseth, T. (u.å.). Syre-baseregulering. Store medisinske leksikon.", url:"https://sml.snl.no/syre-baseregulering"},
@@ -1143,8 +1150,8 @@ const PARAMS_NO = {
     name:"Base Excess", abbr:"Standard baseoverskudd", unit:"conc", order:3,
     normalText:"−3 til +3 mmol/L",
     desc:"En beregnet verdi: mengden syre eller base som måtte til for å titrere dette blodet tilbake til pH 7,40 ved en pCO₂ på 40 mmHg. Den er konstruert nettopp for å isolere den metabolske komponenten fra den respiratoriske.",
-    high:"Et baseoverskudd — metabolsk alkalose, eller renal kompensasjon for en kronisk respiratorisk acidose.",
-    low:"Et baseunderskudd — metabolsk acidose, eller renal kompensasjon for en kronisk respiratorisk alkalose.",
+    high:"Et baseoverskudd: metabolsk alkalose, eller renal kompensasjon for en kronisk respiratorisk acidose.",
+    low:"Et baseunderskudd: metabolsk acidose, eller renal kompensasjon for en kronisk respiratorisk alkalose.",
     normalNote:"Tyder på at den metabolske komponenten er uforstyrret. Hvis pH fortsatt er avvikende med normal base excess, er problemet primært respiratorisk.",
     links:[
       {label:"Nordseth, T. (u.å.). Syre-baseregulering. Store medisinske leksikon.", url:"https://sml.snl.no/syre-baseregulering"},
@@ -1155,10 +1162,10 @@ const PARAMS_NO = {
   po2: {
     name:"pO₂", abbr:"Arterielt O₂-trykk", unit:"pressure", order:4,
     normalMmHg:[75,105],
-    desc:"Partialtrykket av løst oksygen — et mål på gassutveksling, ikke ventilasjon. Synker gradvis med alderen selv i friske lunger.",
+    desc:"Partialtrykket av løst oksygen: et mål på gassutveksling, ikke ventilasjon. Synker gradvis med alderen selv i friske lunger.",
     high:"Som regel bare tilført oksygen. Sjelden klinisk betydningsfullt alene, unntatt i spesielle sammenhenger som hyperbar oksygenbehandling.",
-    low:"Hypoksemi — V/Q-mismatch, shunt, diffusjonshinder, hypoventilering eller lavt inspirert oksygen (høyde). Tolkes alltid opp mot FiO₂, ikke isolert.",
-    normalNote:"En normal pO₂ på romluft er betryggende, men en normal pO₂ ved høy FiO₂ kan likevel representere betydelig lungesykdom — les alltid pO₂ opp mot oksygenet pasienten faktisk får.",
+    low:"Hypoksemi: V/Q-mismatch, shunt, diffusjonshinder, hypoventilering eller lavt inspirert oksygen (høyde). Tolkes alltid opp mot FiO₂, ikke isolert.",
+    normalNote:"En normal pO₂ på romluft er betryggende, men en normal pO₂ ved høy FiO₂ kan likevel representere betydelig lungesykdom: les alltid pO₂ opp mot oksygenet pasienten faktisk får.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
       {label:"Berend, K. et al. (2014). N Engl J Med, 371(15), 1434.", url:"https://doi.org/10.1056/NEJMra1003327"},
@@ -1169,9 +1176,9 @@ const PARAMS_NO = {
     name:"SaO₂", abbr:"Oksygenmetning", unit:"%", order:5,
     normalText:"97,5–99,9 %",
     desc:"Andelen hemoglobin som bærer oksygen, knyttet til pO₂ via den S-formede oksygen-hemoglobin-dissosiasjonskurven, ikke en rett linje.",
-    high:"Vanligvis ikke patologisk — reflekterer som regel tilført oksygen.",
+    high:"Vanligvis ikke patologisk: reflekterer som regel tilført oksygen.",
     low:"Hypoksemi. Fordi kurven er bratt under omtrent 60 mmHg pO₂, kan metningen falle raskt når den først begynner å synke.",
-    normalNote:"En normal SaO₂ kan ligge på det flate øvre platået av kurven mens pO₂ allerede synker — metning er et sent varselsignal. Den er også upålitelig ved CO-forgiftning og methemoglobinemi, der pulsoksymetri viser falskt høye verdier.",
+    normalNote:"En normal SaO₂ kan ligge på det flate øvre platået av kurven mens pO₂ allerede synker: metning er et sent varselsignal. Den er også upålitelig ved CO-forgiftning og methemoglobinemi, der pulsoksymetri viser falskt høye verdier.",
     links:[
       {label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"},
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
@@ -1194,9 +1201,9 @@ const PARAMS_NO = {
   ag: {
     name:"Anion Gap", abbr:"Na⁺ − (Cl⁻ + HCO₃⁻)", unit:"conc", order:7,
     normalText:"10–16 mmol/L",
-    desc:"Estimerer umålte anioner i blodet. Hensikten er å dele metabolsk acidose inn i to mekanistisk ulike grupper — og det avhenger av Na⁺, Cl⁻ og HCO₃⁻ vist under.",
-    high:"Umålte syreanioner er til stede — ketoacidose, laktacidose, uremi/nyresvikt, eller forgiftning (metanol, etylenglykol, salisylater). Ofte gruppert under huskeregelen GOLDMARK.",
-    low:"Som regel en normal-anion-gap (hyperkloremisk) acidose i stedet — bikarbonat tapes direkte eller fortynnes mens klorid stiger som motsvar, som ved diaré, renal tubulær acidose eller store mengder saltvannsinfusjon.",
+    desc:"Estimerer umålte anioner i blodet. Hensikten er å dele metabolsk acidose inn i to mekanistisk ulike grupper: og det avhenger av Na⁺, Cl⁻ og HCO₃⁻ vist under.",
+    high:"Umålte syreanioner er til stede: ketoacidose, laktacidose, uremi/nyresvikt, eller forgiftning (metanol, etylenglykol, salisylater). Ofte gruppert under huskeregelen GOLDMARK.",
+    low:"Som regel en normal-anion-gap (hyperkloremisk) acidose i stedet: bikarbonat tapes direkte eller fortynnes mens klorid stiger som motsvar, som ved diaré, renal tubulær acidose eller store mengder saltvannsinfusjon.",
     normalNote:"Korriger for albumin før du stoler på et normalt gap: hvert fall i albumin på 1 g/dL under 4 g/dL senker forventet gap med omtrent 2,5 mmol/L, noe som kan maskere en reell forhøyelse hos pasienter med hypoalbuminemi.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
@@ -1208,8 +1215,8 @@ const PARAMS_NO = {
     name:"Hb (blodgass)", abbr:"Hemoglobin", unit:"conc", order:8,
     normalText:"11,0–17,0 g/dL",
     desc:"Hemoglobin målt på blodgassanalysatoren. Gir et raskt sengeestimert mål, men verdier fra dedikert hematologiapparat bør brukes til endelige kliniske beslutninger.",
-    high:"Polycytemi — dehydrering, primær polycytemia vera, kronisk hypoksi (høyde, KOLS, cyanotisk hjertesykdom).",
-    low:"Anemi — blødning, hemolyse, benmargsvikt, kronisk sykdom, ernæringsmangler.",
+    high:"Polycytemi: dehydrering, primær polycytemia vera, kronisk hypoksi (høyde, KOLS, cyanotisk hjertesykdom).",
+    low:"Anemi: blødning, hemolyse, benmargsvikt, kronisk sykdom, ernæringsmangler.",
     normalNote:"Blodgassanalysatoren kan avvike fra hematologiapparatet. I kritiske situasjoner, behandle det kliniske bildet fremfor å feste seg ved én enkelt tallverdi fra ett apparat.",
     links:[{label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"},{label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}]
   },
@@ -1219,14 +1226,14 @@ const PARAMS_NO = {
     desc:"Andelen hemoglobin som faktisk bærer oksygen, målt direkte ved ko-oksymetri. Skiller seg fra SaO₂ ved at dyshemoglobiner ikke regnes med.",
     high:"Tilført oksygen.",
     low:"Hypoksemi, eller fortrengning av dyshemoglobiner (COHb, MetHb). Lav O₂Hb med 'normal' SaO₂ fra pulsoksymetri bør vekke mistanke om CO-forgiftning eller methemoglobinemi.",
-    normalNote:"Lavere enn SaO₂ fra pulsoksymetri ved CO-forgiftning — pulsoksymetri skiller ikke mellom oksyhemoglobin og karboksyhemoglobin.",
+    normalNote:"Lavere enn SaO₂ fra pulsoksymetri ved CO-forgiftning: pulsoksymetri skiller ikke mellom oksyhemoglobin og karboksyhemoglobin.",
     links:[{label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"},{label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}]
   },
   cohb: {
     name:"COHb", abbr:"Karboksyhemoglobin", unit:"%", order:10,
     normalText:"< 1,5 %",
     desc:"Hemoglobin bundet til karbonmonoksid. CO binder hemoglobin omtrent 250 ganger sterkere enn oksygen og blokkerer O₂-transport selv når pO₂ ser normal ut.",
-    high:"CO-forgiftning — husbranner, defekte fyringsanlegg, eksoseksponering. Røykere har typisk 3–10 %. Over 20–25 % gir alvorlige symptomer; over 50 % kan være dødelig.",
+    high:"CO-forgiftning: husbranner, defekte fyringsanlegg, eksoseksponering. Røykere har typisk 3–10 %. Over 20–25 % gir alvorlige symptomer; over 50 % kan være dødelig.",
     low:"Ikke klinisk relevant.",
     normalNote:"Pulsoksymetri er upålitelig ved CO-forgiftning. Bare ko-oksymetri på blodgassprøve avdekker COHb. Bestill alltid blodgass ved mistanke om CO-eksponering.",
     links:[{label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},{label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}]
@@ -1234,8 +1241,8 @@ const PARAMS_NO = {
   methb: {
     name:"MetHb", abbr:"Methemoglobin", unit:"%", order:11,
     normalText:"< 2,0 %",
-    desc:"Hemoglobin der jernet er oksidert til Fe³⁺, ute av stand til å binde oksygen. Skyldes oftest oksiderende legemidler — dapson, nitrater, benzokain og prilokain er vanligst.",
-    high:"Methemoglobinemi — legemidler (dapson, nitrater, lokalbedøvelse), kongenital mangel. Over 20–30 % gir symptomer; over 70 % er livstruende.",
+    desc:"Hemoglobin der jernet er oksidert til Fe³⁺, ute av stand til å binde oksygen. Skyldes oftest oksiderende legemidler: dapson, nitrater, benzokain og prilokain er vanligst.",
+    high:"Methemoglobinemi: legemidler (dapson, nitrater, lokalbedøvelse), kongenital mangel. Over 20–30 % gir symptomer; over 70 % er livstruende.",
     low:"Ikke klinisk relevant.",
     normalNote:"Pulsoksymetri viser MetHb som ca. 85 % uavhengig av reell metning. Brunt blod som ikke rødner ved lufteksponering er et klinisk tegn.",
     links:[{label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}]
@@ -1243,8 +1250,8 @@ const PARAMS_NO = {
   deoxyhb: {
     name:"Deoksy-Hb", abbr:"Deoksyhemoglobin", unit:"%", order:12,
     normalText:"0–5,0 %",
-    desc:"Hemoglobin uten oksygen bundet — den 'brukte' formen. Normalt en liten fraksjon i arterielt blod.",
-    high:"Hypoksemi eller redusert hjerteminuttvolum — venøst blod tatt utilsiktet, eller alvorlig arteriell hypoksemi.",
+    desc:"Hemoglobin uten oksygen bundet: den 'brukte' formen. Normalt en liten fraksjon i arterielt blod.",
+    high:"Hypoksemi eller redusert hjerteminuttvolum: venøst blod tatt utilsiktet, eller alvorlig arteriell hypoksemi.",
     low:"Ikke klinisk relevant.",
     normalNote:"I en ekte arteriell prøve tyder deoksyhemoglobin over ca. 5 % på betydelig hypoksemi.",
     links:[{label:"Hov, G. G. & Quist-Paulsen, P. (u.å.). Hemoglobin. Store medisinske leksikon.", url:"https://sml.snl.no/hemoglobin"}]
@@ -1252,18 +1259,18 @@ const PARAMS_NO = {
   ca_ion: {
     name:"Ca²⁺ (ionisert)", abbr:"Ionisert kalsium", unit:"conc", order:13,
     normalText:"1,10–1,34 mmol/L",
-    desc:"Den biologisk aktive, fritt sirkulerende fraksjonen av kalsium. Ionisert kalsium er det som har fysiologisk effekt — total-kalsium er bare halvparten av historien.",
-    high:"Hyperkalsiemi — primær hyperparatyroidisme, malignitet (PTHrP, lytiske benmetastaser), vitamin D-forgiftning, sarkoidose, tiaziddiuretika.",
-    low:"Hypokalsiemi — hypoparatyroidisme, pankreatitt, massiv transfusjon (citrat binder kalsium), vitamin D-mangel, alkalose, rabdomyolyse.",
-    normalNote:"pH påvirker ionisert kalsium direkte: alkalose senker det og acidose øker det. Tolkes alltid opp mot pH. Mål ionisert direkte der det er mulig — albuminkorigert total-kalsium er en dårligere erstatning.",
+    desc:"Den biologisk aktive, fritt sirkulerende fraksjonen av kalsium. Ionisert kalsium er det som har fysiologisk effekt: total-kalsium er bare halvparten av historien.",
+    high:"Hyperkalsiemi: primær hyperparatyroidisme, malignitet (PTHrP, lytiske benmetastaser), vitamin D-forgiftning, sarkoidose, tiaziddiuretika.",
+    low:"Hypokalsiemi: hypoparatyroidisme, pankreatitt, massiv transfusjon (citrat binder kalsium), vitamin D-mangel, alkalose, rabdomyolyse.",
+    normalNote:"pH påvirker ionisert kalsium direkte: alkalose senker det og acidose øker det. Tolkes alltid opp mot pH. Mål ionisert direkte der det er mulig: albuminkorigert total-kalsium er en dårligere erstatning.",
     links:[{label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},{label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}]
   },
   glucose: {
     name:"Glukose", abbr:"Blodsukker", unit:"conc", order:14,
     normalText:"4,2–6,3 mmol/L",
     desc:"Blodsukker målt på blodgassanalysatoren. Nyttig ved diabetisk ketoacidose, hypoglykemi eller kritisk sykdom der raske resultater er nødvendige.",
-    high:"Hyperglykemi — diabetes, stressrespons, kortikosteroider, total parenteral ernæring, pankreatitt.",
-    low:"Hypoglykemi — insulinoverskudd, sulfonylureider, leversvikt, sepsis, binyrebarksvikt.",
+    high:"Hyperglykemi: diabetes, stressrespons, kortikosteroider, total parenteral ernæring, pankreatitt.",
+    low:"Hypoglykemi: insulinoverskudd, sulfonylureider, leversvikt, sepsis, binyrebarksvikt.",
     normalNote:"Blodgassanalysatoren måler fullblodsglukose, ca. 10–15 % lavere enn plasmaverdien. Sjekk alltid med fingerstikk-glukometer for kritiske verdier. Normalt fastende: 4,0–6,0 mmol/L.",
     links:[{label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},{label:"Legevakthåndboka. Universitetet i Oslo.", url:"https://www.legevakthandboka.no"}]
   }
@@ -1271,21 +1278,21 @@ const PARAMS_NO = {
 
 const ELECTROLYTES_EN = {
   na: {name:"Na⁺", abbr:"Sodium", normalText:"137 – 145 mmol/L", desc:"The main extracellular cation; the first term in the anion-gap calculation."},
-  cl: {name:"Cl⁻", abbr:"Chloride", normalText:"98 – 107 mmol/L", desc:"Rises to compensate for bicarbonate loss in normal-anion-gap acidosis — a 'hyperchloremic' picture."},
+  cl: {name:"Cl⁻", abbr:"Chloride", normalText:"98 – 107 mmol/L", desc:"Rises to compensate for bicarbonate loss in normal-anion-gap acidosis: a 'hyperchloremic' picture."},
   k:  {name:"K⁺", abbr:"Potassium", normalText:"3.5 – 4.4 mmol/L", desc:"Shifts with acid–base status: acidemia tends to push potassium out of cells, alkalemia pulls it in."}
 };
 let ELECTROLYTES = ELECTROLYTES_EN;
 
 const ELECTROLYTES_NO = {
   na: {name:"Na⁺", abbr:"Natrium", normalText:"137 – 145 mmol/L", desc:"Det viktigste ekstracellulære kationet; det første leddet i anion gap-beregningen."},
-  cl: {name:"Cl⁻", abbr:"Klorid", normalText:"98 – 107 mmol/L", desc:"Stiger for å kompensere for bikarbonattap ved normal-anion-gap-acidose — et 'hyperkloremisk' bilde."},
+  cl: {name:"Cl⁻", abbr:"Klorid", normalText:"98 – 107 mmol/L", desc:"Stiger for å kompensere for bikarbonattap ved normal-anion-gap-acidose: et 'hyperkloremisk' bilde."},
   k:  {name:"K⁺", abbr:"Kalium", normalText:"3,5 – 4,4 mmol/L", desc:"Endres med syre-basestatus: acidemi presser som regel kalium ut av cellene, alkalemi trekker det inn."}
 };
 
 const PRESETS_EN = [
   {
     id:"normal", category:"Baseline", title:"Normal ABG",
-    blurb:"For comparison — everything within range.",
+    blurb:"For comparison: everything within range.",
     values:{ph:7.40, pco2:40, hco3:24, be:0, po2:95, sao2:97, lactate:1.0, na:140, cl:104, k:4.0},
     teaching:"All four core values sit centrally in range. Use this as the mental anchor every other case is compared against."
   },
@@ -1293,7 +1300,7 @@ const PRESETS_EN = [
     id:"ara-uncomp", category:"Respiratory acidosis", title:"Acute respiratory acidosis",
     blurb:"Opioid overdose, acute airway obstruction.",
     values:{ph:7.22, pco2:65, hco3:26, be:1, po2:70, sao2:90, lactate:1.2, na:139, cl:101, k:4.2},
-    teaching:"pCO₂ has jumped from 40 to 65 but HCO₃⁻ has only nudged up — that's immediate chemical buffering, not renal compensation, which takes days to develop. pH is therefore still markedly low. Classic acute, uncompensated picture."
+    teaching:"pCO₂ has jumped from 40 to 65 but HCO₃⁻ has only nudged up: that's immediate chemical buffering, not renal compensation, which takes days to develop. pH is therefore still markedly low. Classic acute, uncompensated picture."
   },
   {
     id:"crf-comp", category:"Respiratory acidosis", title:"Chronic respiratory acidosis, compensated",
@@ -1311,43 +1318,43 @@ const PRESETS_EN = [
     id:"rac-comp", category:"Respiratory alkalosis", title:"Chronic respiratory alkalosis, compensated",
     blurb:"High altitude residence, chronic liver disease, pregnancy.",
     values:{ph:7.42, pco2:28, hco3:19, be:-5, po2:85, sao2:96, lactate:0.9, na:141, cl:111, k:4.0},
-    teaching:"pCO₂ is just as low as the acute case, but HCO₃⁻ has fallen much further (24→19) because the kidneys have had time to excrete bicarbonate. pH lands almost exactly normal — the giveaway that this has been going on for days, not hours."
+    teaching:"pCO₂ is just as low as the acute case, but HCO₃⁻ has fallen much further (24→19) because the kidneys have had time to excrete bicarbonate. pH lands almost exactly normal: the giveaway that this has been going on for days, not hours."
   },
   {
     id:"dka-comp", category:"Metabolic acidosis", title:"High-anion-gap acidosis, compensated",
     blurb:"Diabetic ketoacidosis.",
     values:{ph:7.18, pco2:22, hco3:10, be:-16, po2:100, sao2:98, lactate:2.0, na:132, cl:96, k:5.2},
-    teaching:"HCO₃⁻ has collapsed to 10. Winters' formula predicts an expected pCO₂ of about 21–25 for this HCO₃⁻ — the actual pCO₂ of 22 sits right inside that range, so the respiratory system is compensating exactly as expected (Kussmaul breathing). The anion gap here is 26 — clearly elevated, consistent with ketoacid accumulation."
+    teaching:"HCO₃⁻ has collapsed to 10. Winters' formula predicts an expected pCO₂ of about 21–25 for this HCO₃⁻: the actual pCO₂ of 22 sits right inside that range, so the respiratory system is compensating exactly as expected (Kussmaul breathing). The anion gap here is 26: clearly elevated, consistent with ketoacid accumulation."
   },
   {
     id:"nagma", category:"Metabolic acidosis", title:"Normal-anion-gap acidosis",
     blurb:"Severe diarrhea, renal tubular acidosis.",
     values:{ph:7.30, pco2:32, hco3:16, be:-8, po2:95, sao2:97, lactate:1.0, na:138, cl:112, k:3.3},
-    teaching:"HCO₃⁻ is reduced but the anion gap works out to 10 — normal. Chloride has risen instead (112), producing a hyperchloremic acidosis from direct bicarbonate loss in stool rather than acid accumulation."
+    teaching:"HCO₃⁻ is reduced but the anion gap works out to 10: normal. Chloride has risen instead (112), producing a hyperchloremic acidosis from direct bicarbonate loss in stool rather than acid accumulation."
   },
   {
     id:"ma-uncomp", category:"Metabolic alkalosis", title:"Metabolic alkalosis, uncompensated",
     blurb:"Vomiting, nasogastric suction.",
     values:{ph:7.54, pco2:42, hco3:34, be:10, po2:90, sao2:97, lactate:1.0, na:138, cl:88, k:3.0},
-    teaching:"HCO₃⁻ is high from loss of gastric acid, but pCO₂ is still essentially 40 — the respiratory compensation that would retain CO₂ hasn't developed yet. Chloride is low, mirroring the bicarbonate rise."
+    teaching:"HCO₃⁻ is high from loss of gastric acid, but pCO₂ is still essentially 40: the respiratory compensation that would retain CO₂ hasn't developed yet. Chloride is low, mirroring the bicarbonate rise."
   },
   {
     id:"ma-comp", category:"Metabolic alkalosis", title:"Metabolic alkalosis, compensated",
     blurb:"Chronic diuretic therapy.",
     values:{ph:7.46, pco2:47, hco3:33, be:9, po2:88, sao2:96, lactate:1.0, na:139, cl:90, k:3.2},
-    teaching:"Now pCO₂ has risen to 47 — the lungs are retaining CO₂ to blunt the alkalemia, the expected response for an HCO₃⁻ this high. Respiratory compensation for metabolic alkalosis is limited and rarely pushes pCO₂ much past the mid-50s even when fully developed."
+    teaching:"Now pCO₂ has risen to 47: the lungs are retaining CO₂ to blunt the alkalemia, the expected response for an HCO₃⁻ this high. Respiratory compensation for metabolic alkalosis is limited and rarely pushes pCO₂ much past the mid-50s even when fully developed."
   },
   {
     id:"salicylate", category:"Mixed disorder", title:"Salicylate toxicity",
-    blurb:"Aspirin overdose — a classic mixed picture.",
+    blurb:"Aspirin overdose: a classic mixed picture.",
     values:{ph:7.43, pco2:20, hco3:14, be:-10, po2:100, sao2:99, lactate:2.5, na:140, cl:100, k:4.0},
-    teaching:"Two primary disorders at once: salicylate directly stimulates the respiratory centre (primary respiratory alkalosis) while also generating an elevated-anion-gap metabolic acidosis. Winters' formula predicts an expected pCO₂ near 29 for an HCO₃⁻ of 14 — the actual pCO₂ of 20 is far lower than expected, revealing the second, independent respiratory process. pH ends up deceptively close to normal."
+    teaching:"Two primary disorders at once: salicylate directly stimulates the respiratory centre (primary respiratory alkalosis) while also generating an elevated-anion-gap metabolic acidosis. Winters' formula predicts an expected pCO₂ near 29 for an HCO₃⁻ of 14: the actual pCO₂ of 20 is far lower than expected, revealing the second, independent respiratory process. pH ends up deceptively close to normal."
   },
   {
     id:"sepsis", category:"Metabolic acidosis", title:"Lactic acidosis in sepsis",
     blurb:"Septic shock with tissue hypoperfusion.",
     values:{ph:7.28, pco2:28, hco3:13, be:-12, po2:75, sao2:92, lactate:6.5, na:136, cl:104, k:4.8},
-    teaching:"Lactate of 6.5 mmol/L drives a high anion gap (19) and a low HCO₃⁻. Expected pCO₂ by Winters' formula is roughly 25.5–29.5 for this HCO₃⁻; the actual value of 28 falls inside that range, so respiratory compensation is appropriate — the lactate trend, not the gas alone, is what should guide resuscitation."
+    teaching:"Lactate of 6.5 mmol/L drives a high anion gap (19) and a low HCO₃⁻. Expected pCO₂ by Winters' formula is roughly 25.5–29.5 for this HCO₃⁻; the actual value of 28 falls inside that range, so respiratory compensation is appropriate: the lactate trend, not the gas alone, is what should guide resuscitation."
   }
 ];
 let PRESETS = PRESETS_EN;
@@ -1355,7 +1362,7 @@ let PRESETS = PRESETS_EN;
 const PRESETS_NO = [
   {
     id:"normal", category:"Utgangspunkt", title:"Normal blodgass",
-    blurb:"Til sammenligning — alt innenfor normalområdet.",
+    blurb:"Til sammenligning: alt innenfor normalområdet.",
     values:{ph:7.40, pco2:40, hco3:24, be:0, po2:95, sao2:97, lactate:1.0, na:140, cl:104, k:4.0},
     teaching:"Alle de fire kjerneverdiene ligger midt i normalområdet. Bruk denne som det mentale ankeret alle de andre kasusene sammenlignes med."
   },
@@ -1363,7 +1370,7 @@ const PRESETS_NO = [
     id:"ara-uncomp", category:"Respiratorisk acidose", title:"Akutt respiratorisk acidose",
     blurb:"Opioidoverdose, akutt luftveisobstruksjon.",
     values:{ph:7.22, pco2:65, hco3:26, be:1, po2:70, sao2:90, lactate:1.2, na:139, cl:101, k:4.2},
-    teaching:"pCO₂ har hoppet fra 40 til 65, men HCO₃⁻ har bare beveget seg svakt oppover — det er umiddelbar kjemisk buffring, ikke renal kompensasjon, som tar dager å utvikle. pH er derfor fortsatt markert lav. Klassisk akutt, ukompensert bilde."
+    teaching:"pCO₂ har hoppet fra 40 til 65, men HCO₃⁻ har bare beveget seg svakt oppover: det er umiddelbar kjemisk buffring, ikke renal kompensasjon, som tar dager å utvikle. pH er derfor fortsatt markert lav. Klassisk akutt, ukompensert bilde."
   },
   {
     id:"crf-comp", category:"Respiratorisk acidose", title:"Kronisk respiratorisk acidose, kompensert",
@@ -1381,78 +1388,78 @@ const PRESETS_NO = [
     id:"rac-comp", category:"Respiratorisk alkalose", title:"Kronisk respiratorisk alkalose, kompensert",
     blurb:"Opphold i høyden, kronisk leversykdom, graviditet.",
     values:{ph:7.42, pco2:28, hco3:19, be:-5, po2:85, sao2:96, lactate:0.9, na:141, cl:111, k:4.0},
-    teaching:"pCO₂ er like lav som i det akutte kasuset, men HCO₃⁻ har falt mye mer (24→19) fordi nyrene har hatt tid til å skille ut bikarbonat. pH lander nesten nøyaktig normalt — det som avslører at dette har pågått i dager, ikke timer."
+    teaching:"pCO₂ er like lav som i det akutte kasuset, men HCO₃⁻ har falt mye mer (24→19) fordi nyrene har hatt tid til å skille ut bikarbonat. pH lander nesten nøyaktig normalt: det som avslører at dette har pågått i dager, ikke timer."
   },
   {
     id:"dka-comp", category:"Metabolsk acidose", title:"Høyt anion gap, kompensert",
     blurb:"Diabetisk ketoacidose.",
     values:{ph:7.18, pco2:22, hco3:10, be:-16, po2:100, sao2:98, lactate:2.0, na:132, cl:96, k:5.2},
-    teaching:"HCO₃⁻ har falt sammen til 10. Winters' formel predikerer en forventet pCO₂ på omtrent 21–25 for denne HCO₃⁻-verdien — den faktiske pCO₂ på 22 ligger rett innenfor det området, så respirasjonen kompenserer akkurat som forventet (Kussmaul-respirasjon). Anion gap her er 26 — klart forhøyet, i tråd med opphopning av ketosyrer."
+    teaching:"HCO₃⁻ har falt sammen til 10. Winters' formel predikerer en forventet pCO₂ på omtrent 21–25 for denne HCO₃⁻-verdien: den faktiske pCO₂ på 22 ligger rett innenfor det området, så respirasjonen kompenserer akkurat som forventet (Kussmaul-respirasjon). Anion gap her er 26: klart forhøyet, i tråd med opphopning av ketosyrer."
   },
   {
     id:"nagma", category:"Metabolsk acidose", title:"Normalt anion gap-acidose",
     blurb:"Alvorlig diaré, renal tubulær acidose.",
     values:{ph:7.30, pco2:32, hco3:16, be:-8, po2:95, sao2:97, lactate:1.0, na:138, cl:112, k:3.3},
-    teaching:"HCO₃⁻ er redusert, men anion gap beregnes til 10 — normalt. Klorid har i stedet steget (112), noe som gir en hyperkloremisk acidose fra direkte bikarbonattap via tarmen fremfor syreopphopning."
+    teaching:"HCO₃⁻ er redusert, men anion gap beregnes til 10: normalt. Klorid har i stedet steget (112), noe som gir en hyperkloremisk acidose fra direkte bikarbonattap via tarmen fremfor syreopphopning."
   },
   {
     id:"ma-uncomp", category:"Metabolsk alkalose", title:"Metabolsk alkalose, ukompensert",
     blurb:"Oppkast, ventrikkelsondering.",
     values:{ph:7.54, pco2:42, hco3:34, be:10, po2:90, sao2:97, lactate:1.0, na:138, cl:88, k:3.0},
-    teaching:"HCO₃⁻ er høy på grunn av tap av magesyre, men pCO₂ er fortsatt i praksis 40 — den respiratoriske kompensasjonen som ville holdt tilbake CO₂ har ikke utviklet seg ennå. Klorid er lavt, som speiler bikarbonatøkningen."
+    teaching:"HCO₃⁻ er høy på grunn av tap av magesyre, men pCO₂ er fortsatt i praksis 40: den respiratoriske kompensasjonen som ville holdt tilbake CO₂ har ikke utviklet seg ennå. Klorid er lavt, som speiler bikarbonatøkningen."
   },
   {
     id:"ma-comp", category:"Metabolsk alkalose", title:"Metabolsk alkalose, kompensert",
     blurb:"Langvarig diuretikabehandling.",
     values:{ph:7.46, pco2:47, hco3:33, be:9, po2:88, sao2:96, lactate:1.0, na:139, cl:90, k:3.2},
-    teaching:"Nå har pCO₂ steget til 47 — lungene holder tilbake CO₂ for å dempe alkalemien, den forventede responsen for en HCO₃⁻ så høy som denne. Respiratorisk kompensasjon ved metabolsk alkalose er begrenset og presser sjelden pCO₂ stort forbi midten av 50-tallet selv når den er fullt utviklet."
+    teaching:"Nå har pCO₂ steget til 47: lungene holder tilbake CO₂ for å dempe alkalemien, den forventede responsen for en HCO₃⁻ så høy som denne. Respiratorisk kompensasjon ved metabolsk alkalose er begrenset og presser sjelden pCO₂ stort forbi midten av 50-tallet selv når den er fullt utviklet."
   },
   {
     id:"salicylate", category:"Blandet forstyrrelse", title:"Salisylatforgiftning",
-    blurb:"Aspirinoverdose — et klassisk blandet bilde.",
+    blurb:"Aspirinoverdose: et klassisk blandet bilde.",
     values:{ph:7.43, pco2:20, hco3:14, be:-10, po2:100, sao2:99, lactate:2.5, na:140, cl:100, k:4.0},
-    teaching:"To primærforstyrrelser samtidig: salisylat stimulerer respirasjonssenteret direkte (primær respiratorisk alkalose), samtidig som det genererer en metabolsk acidose med forhøyet anion gap. Winters' formel predikerer en forventet pCO₂ nær 29 for en HCO₃⁻ på 14 — den faktiske pCO₂ på 20 er langt lavere enn forventet, noe som avslører den andre, uavhengige respiratoriske prosessen. pH ender bedragersk nær normalt."
+    teaching:"To primærforstyrrelser samtidig: salisylat stimulerer respirasjonssenteret direkte (primær respiratorisk alkalose), samtidig som det genererer en metabolsk acidose med forhøyet anion gap. Winters' formel predikerer en forventet pCO₂ nær 29 for en HCO₃⁻ på 14: den faktiske pCO₂ på 20 er langt lavere enn forventet, noe som avslører den andre, uavhengige respiratoriske prosessen. pH ender bedragersk nær normalt."
   },
   {
     id:"sepsis", category:"Metabolsk acidose", title:"Laktacidose ved sepsis",
     blurb:"Septisk sjokk med vevshypoperfusjon.",
     values:{ph:7.28, pco2:28, hco3:13, be:-12, po2:75, sao2:92, lactate:6.5, na:136, cl:104, k:4.8},
-    teaching:"Laktat på 6,5 mmol/L driver et høyt anion gap (19) og en lav HCO₃⁻. Forventet pCO₂ etter Winters' formel er omtrent 25,5–29,5 for denne HCO₃⁻-verdien; den faktiske verdien på 28 faller innenfor det området, så respiratorisk kompensasjon er hensiktsmessig — laktattrenden, ikke gassen alene, bør styre behandlingen."
+    teaching:"Laktat på 6,5 mmol/L driver et høyt anion gap (19) og en lav HCO₃⁻. Forventet pCO₂ etter Winters' formel er omtrent 25,5–29,5 for denne HCO₃⁻-verdien; den faktiske verdien på 28 faller innenfor det området, så respiratorisk kompensasjon er hensiktsmessig: laktattrenden, ikke gassen alene, bør styre behandlingen."
   }
 ];
 
 const COMP_RULES_EN = [
-  {disorder:"Metabolic acidosis", response:"↓ pCO₂ — hyperventilation", formula:"Expected pCO₂ = 1.5 × HCO₃⁻ + 8 (± 2) — Winters' formula", time:"Minutes to hours"},
-  {disorder:"Metabolic alkalosis", response:"↑ pCO₂ — hypoventilation (limited)", formula:"Expected pCO₂ = 0.7 × HCO₃⁻ + 20 (± 5), rarely above ~55 mmHg", time:"Minutes to hours"},
-  {disorder:"Acute respiratory acidosis", response:"↑ HCO₃⁻ — chemical buffering only", formula:"ΔHCO₃⁻ ≈ +1 per 10 mmHg rise in pCO₂", time:"Minutes"},
-  {disorder:"Chronic respiratory acidosis", response:"↑ HCO₃⁻ — renal compensation", formula:"ΔHCO₃⁻ ≈ +3.5–4 per 10 mmHg rise in pCO₂", time:"3–5 days"},
-  {disorder:"Acute respiratory alkalosis", response:"↓ HCO₃⁻ — chemical buffering only", formula:"ΔHCO₃⁻ ≈ −2 per 10 mmHg fall in pCO₂", time:"Minutes"},
-  {disorder:"Chronic respiratory alkalosis", response:"↓ HCO₃⁻ — renal compensation", formula:"ΔHCO₃⁻ ≈ −4–5 per 10 mmHg fall in pCO₂", time:"3–5 days"}
+  {disorder:"Metabolic acidosis", response:"↓ pCO₂: hyperventilation", formula:"Expected pCO₂ = 1.5 × HCO₃⁻ + 8 (± 2): Winters' formula", time:"Minutes to hours"},
+  {disorder:"Metabolic alkalosis", response:"↑ pCO₂: hypoventilation (limited)", formula:"Expected pCO₂ = 0.7 × HCO₃⁻ + 20 (± 5), rarely above ~55 mmHg", time:"Minutes to hours"},
+  {disorder:"Acute respiratory acidosis", response:"↑ HCO₃⁻: chemical buffering only", formula:"ΔHCO₃⁻ ≈ +1 per 10 mmHg rise in pCO₂", time:"Minutes"},
+  {disorder:"Chronic respiratory acidosis", response:"↑ HCO₃⁻: renal compensation", formula:"ΔHCO₃⁻ ≈ +3.5–4 per 10 mmHg rise in pCO₂", time:"3–5 days"},
+  {disorder:"Acute respiratory alkalosis", response:"↓ HCO₃⁻: chemical buffering only", formula:"ΔHCO₃⁻ ≈ −2 per 10 mmHg fall in pCO₂", time:"Minutes"},
+  {disorder:"Chronic respiratory alkalosis", response:"↓ HCO₃⁻: renal compensation", formula:"ΔHCO₃⁻ ≈ −4–5 per 10 mmHg fall in pCO₂", time:"3–5 days"}
 ];
 let COMP_RULES = COMP_RULES_EN;
 
 const COMP_RULES_NO = [
-  {disorder:"Metabolsk acidose", response:"↓ pCO₂ — hyperventilering", formula:"Forventet pCO₂ = 1,5 × HCO₃⁻ + 8 (± 2) — Winters' formel", time:"Minutter til timer"},
-  {disorder:"Metabolsk alkalose", response:"↑ pCO₂ — hypoventilering (begrenset)", formula:"Forventet pCO₂ = 0,7 × HCO₃⁻ + 20 (± 5), sjelden over ~55 mmHg", time:"Minutter til timer"},
-  {disorder:"Akutt respiratorisk acidose", response:"↑ HCO₃⁻ — kun kjemisk buffring", formula:"ΔHCO₃⁻ ≈ +1 per 10 mmHg økning i pCO₂", time:"Minutter"},
-  {disorder:"Kronisk respiratorisk acidose", response:"↑ HCO₃⁻ — renal kompensasjon", formula:"ΔHCO₃⁻ ≈ +3,5–4 per 10 mmHg økning i pCO₂", time:"3–5 dager"},
-  {disorder:"Akutt respiratorisk alkalose", response:"↓ HCO₃⁻ — kun kjemisk buffring", formula:"ΔHCO₃⁻ ≈ −2 per 10 mmHg reduksjon i pCO₂", time:"Minutter"},
-  {disorder:"Kronisk respiratorisk alkalose", response:"↓ HCO₃⁻ — renal kompensasjon", formula:"ΔHCO₃⁻ ≈ −4–5 per 10 mmHg reduksjon i pCO₂", time:"3–5 dager"}
+  {disorder:"Metabolsk acidose", response:"↓ pCO₂: hyperventilering", formula:"Forventet pCO₂ = 1,5 × HCO₃⁻ + 8 (± 2): Winters' formel", time:"Minutter til timer"},
+  {disorder:"Metabolsk alkalose", response:"↑ pCO₂: hypoventilering (begrenset)", formula:"Forventet pCO₂ = 0,7 × HCO₃⁻ + 20 (± 5), sjelden over ~55 mmHg", time:"Minutter til timer"},
+  {disorder:"Akutt respiratorisk acidose", response:"↑ HCO₃⁻: kun kjemisk buffring", formula:"ΔHCO₃⁻ ≈ +1 per 10 mmHg økning i pCO₂", time:"Minutter"},
+  {disorder:"Kronisk respiratorisk acidose", response:"↑ HCO₃⁻: renal kompensasjon", formula:"ΔHCO₃⁻ ≈ +3,5–4 per 10 mmHg økning i pCO₂", time:"3–5 dager"},
+  {disorder:"Akutt respiratorisk alkalose", response:"↓ HCO₃⁻: kun kjemisk buffring", formula:"ΔHCO₃⁻ ≈ −2 per 10 mmHg reduksjon i pCO₂", time:"Minutter"},
+  {disorder:"Kronisk respiratorisk alkalose", response:"↓ HCO₃⁻: renal kompensasjon", formula:"ΔHCO₃⁻ ≈ −4–5 per 10 mmHg reduksjon i pCO₂", time:"3–5 dager"}
 ];
 
 const COMP_NOTES_EN = [
   {title:"The body never overshoots.", text:"Compensation pulls pH back toward 7.40 but essentially never crosses over into the opposite abnormality. If you see that pattern, suspect a second primary disorder rather than 'compensation gone too far'."},
   {title:"A normal pH with abnormal gases is still a clue.", text:"It usually means either a fully compensated chronic single disorder, or two opposing primary disorders. The size of the pCO₂/HCO₃⁻ derangement relative to the compensation formulas is what tells them apart."},
-  {title:"Respiratory compensation is fast; renal compensation is slow.", text:"Lungs can respond within minutes. Kidneys take three to five days to substantially change bicarbonate handling — which is why 'acute' and 'chronic' respiratory disorders look so different despite an identical pCO₂."},
-  {title:"Compare actual to expected, not actual to normal.", text:"The question is never just 'is pCO₂ abnormal' — it's 'is pCO₂ where the compensation formula predicts'. Higher than expected suggests a second acidifying process; lower than expected suggests a second alkalinizing one."}
+  {title:"Respiratory compensation is fast; renal compensation is slow.", text:"Lungs can respond within minutes. Kidneys take three to five days to substantially change bicarbonate handling: which is why 'acute' and 'chronic' respiratory disorders look so different despite an identical pCO₂."},
+  {title:"Compare actual to expected, not actual to normal.", text:"The question is never just 'is pCO₂ abnormal': it's 'is pCO₂ where the compensation formula predicts'. Higher than expected suggests a second acidifying process; lower than expected suggests a second alkalinizing one."}
 ];
 let COMP_NOTES = COMP_NOTES_EN;
 
 const COMP_NOTES_NO = [
   {title:"Kroppen overkompenserer aldri.", text:"Kompensasjon trekker pH tilbake mot 7,40, men krysser så godt som aldri over i motsatt avvik. Ser du det mønsteret, bør du mistenke en ny primærforstyrrelse fremfor 'kompensasjon som har gått for langt'."},
   {title:"En normal pH med avvikende gasser er fortsatt et hint.", text:"Det betyr som regel enten en fullt kompensert kronisk enkeltforstyrrelse, eller to motsatt rettede primærforstyrrelser. Størrelsen på pCO₂/HCO₃⁻-avviket sammenlignet med kompensasjonsformlene er det som skiller dem fra hverandre."},
-  {title:"Respiratorisk kompensasjon er rask; renal kompensasjon er treg.", text:"Lungene kan respondere i løpet av minutter. Nyrene bruker tre til fem dager på å endre bikarbonathåndteringen vesentlig — det er derfor 'akutte' og 'kroniske' respiratoriske forstyrrelser ser så ulike ut til tross for identisk pCO₂."},
-  {title:"Sammenlign faktisk med forventet, ikke faktisk med normalt.", text:"Spørsmålet er aldri bare 'er pCO₂ avvikende' — det er 'er pCO₂ der kompensasjonsformelen forutsier'. Høyere enn forventet tyder på en ny syredannende prosess; lavere enn forventet tyder på en ny basedannende prosess."}
+  {title:"Respiratorisk kompensasjon er rask; renal kompensasjon er treg.", text:"Lungene kan respondere i løpet av minutter. Nyrene bruker tre til fem dager på å endre bikarbonathåndteringen vesentlig: det er derfor 'akutte' og 'kroniske' respiratoriske forstyrrelser ser så ulike ut til tross for identisk pCO₂."},
+  {title:"Sammenlign faktisk med forventet, ikke faktisk med normalt.", text:"Spørsmålet er aldri bare 'er pCO₂ avvikende': det er 'er pCO₂ der kompensasjonsformelen forutsier'. Høyere enn forventet tyder på en ny syredannende prosess; lavere enn forventet tyder på en ny basedannende prosess."}
 ];
 
 const SOURCES = [
@@ -1499,8 +1506,10 @@ const state = {
   fontSize: "medium",
   showRules: false,
   noteItalic: false,
-  noteBold: false,
+  noteBold: true,
   noteUnderline: false,
+  noteColor: true,
+  flagSymbol: "arrows",
   activeTab: "panel-reference",
   openTooltipBtn: null
 };
@@ -1601,9 +1610,22 @@ function presetAG(values){
   if(values.na===undefined || values.cl===undefined) return null;
   return values.na - (values.cl + values.hco3);
 }
+const FLAG_SYMBOLS = {
+  arrows:    {high:"↑",   low:"↓"},
+  filled:    {high:"⬆",  low:"⬇"},
+  plusminus: {high:"+",   low:"−"},
+  parens:    {high:"(↑)", low:"(↓)"},
+};
+function getFlagSymbol(flag){
+  const s = FLAG_SYMBOLS[state.flagSymbol] || FLAG_SYMBOLS.arrows;
+  if(flag==="high") return s.high;
+  if(flag==="low")  return s.low;
+  return "";
+}
 function presetValueRow(label, val, decimals, unitSuffix, flag){
   const flagClass = flag==="high" ? "v-high" : flag==="low" ? "v-low" : "v-normal";
-  const arrow = flag==="high" ? '<span class="v-arrow" aria-hidden="true">↑</span>' : flag==="low" ? '<span class="v-arrow" aria-hidden="true">↓</span>' : "";
+  const sym = getFlagSymbol(flag);
+  const arrow = sym ? `<span class="v-arrow" aria-hidden="true">${sym}</span>` : "";
   return `<div class="preset-val"><span class="preset-val-label">${label}</span><span class="preset-val-num ${flagClass}">${arrow}${fmtNum(val,decimals)}${unitSuffix?(" "+unitSuffix):""}</span></div>`;
 }
 function renderPresetGrid(){
@@ -1673,9 +1695,9 @@ function gatherAnalyzerInputs(){
     let raw = document.getElementById(id).value.trim();
     if(raw === "") return null;
     // Normalise: replace comma-decimal → dot-decimal, strip anything not digit/dot/minus
-    // Handle both "7,22" and "7.22" — if there are both comma and dot, treat last one as decimal
+    // Handle both "7,22" and "7.22": if there are both comma and dot, treat last one as decimal
     if(raw.indexOf(",") !== -1 && raw.indexOf(".") !== -1){
-      // e.g. "1.234,5" → European thousands — strip dots, replace comma with dot
+      // e.g. "1.234,5" → European thousands: strip dots, replace comma with dot
       raw = raw.replace(/\./g, "").replace(",", ".");
     } else {
       raw = raw.replace(",", ".");
@@ -1709,35 +1731,35 @@ function classifyAndAnalyze(v){
   const phState = v.ph<7.35?"acidemia": v.ph>7.45?"alkalemia":"normal";
   const stateWord = s => tt({high:"high",low:"low",normal:"normal"}[s], {high:"høy",low:"lav",normal:"normal"}[s]);
 
-  // STEP 1 — pH
+  // STEP 1: pH
   let phText;
-  if(phState==="acidemia") phText = tt(`pH ${fmtNum(v.ph,2)} — acidemia.`, `pH ${fmtNum(v.ph,2)} — acidemi.`);
-  else if(phState==="alkalemia") phText = tt(`pH ${fmtNum(v.ph,2)} — alkalemia.`, `pH ${fmtNum(v.ph,2)} — alkalemi.`);
-  else phText = tt(`pH ${fmtNum(v.ph,2)} — within the normal 7.35–7.45 range. That alone does not rule out a disorder — keep going.`,
-                    `pH ${fmtNum(v.ph,2)} — innenfor normalområdet 7,35–7,45. Det utelukker ikke en syre-baseforstyrrelse alene — fortsett vurderingen.`);
-  steps.push({label:tt("Step 1 — pH","Steg 1 — pH"), text:phText,
+  if(phState==="acidemia") phText = tt(`pH ${fmtNum(v.ph,2)}: acidemia.`, `pH ${fmtNum(v.ph,2)}: acidemi.`);
+  else if(phState==="alkalemia") phText = tt(`pH ${fmtNum(v.ph,2)}: alkalemia.`, `pH ${fmtNum(v.ph,2)}: alkalemi.`);
+  else phText = tt(`pH ${fmtNum(v.ph,2)}: within the normal 7.35–7.45 range. That alone does not rule out a disorder: keep going.`,
+                    `pH ${fmtNum(v.ph,2)}: innenfor normalområdet 7,35–7,45. Det utelukker ikke en syre-baseforstyrrelse alene: fortsett vurderingen.`);
+  steps.push({label:tt("Step 1: pH","Steg 1: pH"), text:phText,
     rule:tt("Normal: 7.35–7.45 | < 7.35 = acidemia | > 7.45 = alkalemia",
             "Normalområde: 7,35–7,45 | < 7,35 = acidemi | > 7,45 = alkalemi")});
 
-  // STEP 2 — primary process
+  // STEP 2: primary process
   let primary = "", primaryKind = "";
   if(phState==="acidemia"){
     if(pcoState==="high" && hco3State!=="low"){ primary=tt("primary respiratory acidosis","primær respiratorisk acidose"); primaryKind="resp-acid"; }
     else if(hco3State==="low" && pcoState!=="high"){ primary=tt("primary metabolic acidosis","primær metabolsk acidose"); primaryKind="met-acid"; }
-    else if(pcoState==="high" && hco3State==="low"){ primary=tt("a mixed respiratory + metabolic acidosis — both values are pushing pH down at once","en blandet respiratorisk og metabolsk acidose — begge verdiene trekker pH ned samtidig"); primaryKind="mixed-acid"; }
-    else { primary=tt("acidemia without a clean single driver — pCO₂ and HCO₃⁻ are both reading near normal; double-check the values","acidemi uten en tydelig enkeltårsak — både pCO₂ og HCO₃⁻ ligger nær normalområdet; kontroller verdiene på nytt"); primaryKind="unclear"; }
+    else if(pcoState==="high" && hco3State==="low"){ primary=tt("a mixed respiratory + metabolic acidosis: both values are pushing pH down at once","en blandet respiratorisk og metabolsk acidose: begge verdiene trekker pH ned samtidig"); primaryKind="mixed-acid"; }
+    else { primary=tt("acidemia without a clean single driver: pCO₂ and HCO₃⁻ are both reading near normal; double-check the values","acidemi uten en tydelig enkeltårsak: både pCO₂ og HCO₃⁻ ligger nær normalområdet; kontroller verdiene på nytt"); primaryKind="unclear"; }
   } else if(phState==="alkalemia"){
     if(pcoState==="low" && hco3State!=="high"){ primary=tt("primary respiratory alkalosis","primær respiratorisk alkalose"); primaryKind="resp-alk"; }
     else if(hco3State==="high" && pcoState!=="low"){ primary=tt("primary metabolic alkalosis","primær metabolsk alkalose"); primaryKind="met-alk"; }
-    else if(pcoState==="low" && hco3State==="high"){ primary=tt("a mixed respiratory + metabolic alkalosis — both values are pushing pH up at once","en blandet respiratorisk og metabolsk alkalose — begge verdiene trekker pH opp samtidig"); primaryKind="mixed-alk"; }
-    else { primary=tt("alkalemia without a clean single driver — double-check the values","alkalemi uten en tydelig enkeltårsak — kontroller verdiene på nytt"); primaryKind="unclear"; }
+    else if(pcoState==="low" && hco3State==="high"){ primary=tt("a mixed respiratory + metabolic alkalosis: both values are pushing pH up at once","en blandet respiratorisk og metabolsk alkalose: begge verdiene trekker pH opp samtidig"); primaryKind="mixed-alk"; }
+    else { primary=tt("alkalemia without a clean single driver: double-check the values","alkalemi uten en tydelig enkeltårsak: kontroller verdiene på nytt"); primaryKind="unclear"; }
   } else {
     if(pcoState==="normal" && hco3State==="normal"){ primary=tt("no acid–base disorder","ingen syre-baseforstyrrelse"); primaryKind="none"; }
-    else if(pcoState==="high" && hco3State==="high"){ primary=tt("a normal pH with high pCO₂ and high HCO₃⁻ — most likely a fully compensated chronic respiratory acidosis, checked below","normal pH med høy pCO₂ og høy HCO₃⁻ — mest sannsynlig en fullt kompensert kronisk respiratorisk acidose, sjekkes under"); primaryKind="comp-resp-acid"; }
-    else if(pcoState==="low" && hco3State==="low"){ primary=tt("a normal pH with low pCO₂ and low HCO₃⁻ — most likely a fully compensated chronic respiratory alkalosis, checked below","normal pH med lav pCO₂ og lav HCO₃⁻ — mest sannsynlig en fullt kompensert kronisk respiratorisk alkalose, sjekkes under"); primaryKind="comp-resp-alk"; }
-    else { primary=tt("a normal pH with only one value abnormal — an unusual combination worth re-checking","normal pH med kun én avvikende verdi — en uvanlig kombinasjon som bør kontrolleres på nytt"); primaryKind="unclear"; }
+    else if(pcoState==="high" && hco3State==="high"){ primary=tt("a normal pH with high pCO₂ and high HCO₃⁻: most likely a fully compensated chronic respiratory acidosis, checked below","normal pH med høy pCO₂ og høy HCO₃⁻: mest sannsynlig en fullt kompensert kronisk respiratorisk acidose, sjekkes under"); primaryKind="comp-resp-acid"; }
+    else if(pcoState==="low" && hco3State==="low"){ primary=tt("a normal pH with low pCO₂ and low HCO₃⁻: most likely a fully compensated chronic respiratory alkalosis, checked below","normal pH med lav pCO₂ og lav HCO₃⁻: mest sannsynlig en fullt kompensert kronisk respiratorisk alkalose, sjekkes under"); primaryKind="comp-resp-alk"; }
+    else { primary=tt("a normal pH with only one value abnormal: an unusual combination worth re-checking","normal pH med kun én avvikende verdi: en uvanlig kombinasjon som bør kontrolleres på nytt"); primaryKind="unclear"; }
   }
-  steps.push({label:tt("Step 2 — primary process","Steg 2 — primærprosess"), text:tt(
+  steps.push({label:tt("Step 2: primary process","Steg 2: primærprosess"), text:tt(
     `pCO₂ is ${stateWord(pcoState)} (${mmHgToDisplay(v.pco2)} ${state.unit}), HCO₃⁻ is ${stateWord(hco3State)} (${fmtNum(v.hco3,0)} mmol/L). Best read: ${primary}.`,
     `pCO₂ er ${stateWord(pcoState)} (${mmHgToDisplay(v.pco2)} ${state.unit}), HCO₃⁻ er ${stateWord(hco3State)} (${fmtNum(v.hco3,0)} mmol/L). Mest sannsynlige tolkning: ${primary}.`
   ), rule:tt(
@@ -1745,39 +1767,39 @@ function classifyAndAnalyze(v){
     "Resp. acidose: ↑pCO₂ + acidemi | Met. acidose: ↓HCO₃⁻ + acidemi | Resp. alkalose: ↓pCO₂ + alkalemi | Met. alkalose: ↑HCO₃⁻ + alkalemi | Normalt pCO₂: 35–45 mmHg | Normalt HCO₃⁻: 22–26 mmol/L"
   )});
 
-  // STEP 3 — compensation check
+  // STEP 3: compensation check
   let verdict = null, verdictText = "";
   if(primaryKind==="met-acid" || primaryKind==="mixed-acid"){
     const range = wintersExpectedPCO2(v.hco3);
     const rangeDisp = [mmHgToDisplay(range[0]), mmHgToDisplay(range[1])].join("–") + " " + state.unit;
     if(within(v.pco2, range)){
       verdict = phState==="normal" ? "full" : "partial";
-      verdictText = tt(`Winters' formula expects a pCO₂ of ${rangeDisp} for this HCO₃⁻. The actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) falls inside that window — the respiratory compensation is appropriate.`,
-                        `Winters' formel tilsier en forventet pCO₂ på ${rangeDisp} for denne HCO₃⁻-verdien. Den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) faller innenfor det vinduet — den respiratoriske kompensasjonen er hensiktsmessig.`);
+      verdictText = tt(`Winters' formula expects a pCO₂ of ${rangeDisp} for this HCO₃⁻. The actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) falls inside that window: the respiratory compensation is appropriate.`,
+                        `Winters' formel tilsier en forventet pCO₂ på ${rangeDisp} for denne HCO₃⁻-verdien. Den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) faller innenfor det vinduet: den respiratoriske kompensasjonen er hensiktsmessig.`);
     } else if(v.pco2 > range[1]){
       verdict = "mixed";
-      verdictText = tt(`Winters' formula expects a pCO₂ of ${rangeDisp}, but the actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) is higher than expected — suggesting a second, concurrent respiratory acidosis on top of the metabolic one.`,
-                        `Winters' formel tilsier en forventet pCO₂ på ${rangeDisp}, men den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) er høyere enn forventet — noe som tyder på en ny, samtidig respiratorisk acidose i tillegg til den metabolske.`);
+      verdictText = tt(`Winters' formula expects a pCO₂ of ${rangeDisp}, but the actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) is higher than expected: suggesting a second, concurrent respiratory acidosis on top of the metabolic one.`,
+                        `Winters' formel tilsier en forventet pCO₂ på ${rangeDisp}, men den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) er høyere enn forventet: noe som tyder på en ny, samtidig respiratorisk acidose i tillegg til den metabolske.`);
     } else {
       verdict = "mixed";
-      verdictText = tt(`Winters' formula expects a pCO₂ of ${rangeDisp}, but the actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) is lower than expected — suggesting a second, concurrent respiratory alkalosis on top of the metabolic one.`,
-                        `Winters' formel tilsier en forventet pCO₂ på ${rangeDisp}, men den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) er lavere enn forventet — noe som tyder på en ny, samtidig respiratorisk alkalose i tillegg til den metabolske.`);
+      verdictText = tt(`Winters' formula expects a pCO₂ of ${rangeDisp}, but the actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) is lower than expected: suggesting a second, concurrent respiratory alkalosis on top of the metabolic one.`,
+                        `Winters' formel tilsier en forventet pCO₂ på ${rangeDisp}, men den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) er lavere enn forventet: noe som tyder på en ny, samtidig respiratorisk alkalose i tillegg til den metabolske.`);
     }
   } else if(primaryKind==="met-alk" || primaryKind==="mixed-alk"){
     const range = metAlkExpectedPCO2(v.hco3);
     const rangeDisp = [mmHgToDisplay(range[0]), mmHgToDisplay(range[1])].join("–") + " " + state.unit;
     if(within(v.pco2, range)){
       verdict = phState==="normal" ? "full" : "partial";
-      verdictText = tt(`The metabolic alkalosis formula expects a pCO₂ of ${rangeDisp}. The actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) falls inside that window — respiratory compensation, which is limited for alkalosis, is doing what it can.`,
-                        `Formelen for metabolsk alkalose tilsier en forventet pCO₂ på ${rangeDisp}. Den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) faller innenfor det vinduet — respiratorisk kompensasjon, som er begrenset ved alkalose, gjør det den kan.`);
+      verdictText = tt(`The metabolic alkalosis formula expects a pCO₂ of ${rangeDisp}. The actual pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) falls inside that window: respiratory compensation, which is limited for alkalosis, is doing what it can.`,
+                        `Formelen for metabolsk alkalose tilsier en forventet pCO₂ på ${rangeDisp}. Den faktiske pCO₂ (${mmHgToDisplay(v.pco2)} ${state.unit}) faller innenfor det vinduet: respiratorisk kompensasjon, som er begrenset ved alkalose, gjør det den kan.`);
     } else if(v.pco2 > range[1]){
       verdict = "mixed";
-      verdictText = tt(`Expected pCO₂ is ${rangeDisp}; the actual value (${mmHgToDisplay(v.pco2)} ${state.unit}) is higher still — consider a concurrent primary respiratory acidosis.`,
-                        `Forventet pCO₂ er ${rangeDisp}; den faktiske verdien (${mmHgToDisplay(v.pco2)} ${state.unit}) er enda høyere — vurder en samtidig primær respiratorisk acidose.`);
+      verdictText = tt(`Expected pCO₂ is ${rangeDisp}; the actual value (${mmHgToDisplay(v.pco2)} ${state.unit}) is higher still: consider a concurrent primary respiratory acidosis.`,
+                        `Forventet pCO₂ er ${rangeDisp}; den faktiske verdien (${mmHgToDisplay(v.pco2)} ${state.unit}) er enda høyere: vurder en samtidig primær respiratorisk acidose.`);
     } else {
       verdict = "mixed";
-      verdictText = tt(`Expected pCO₂ is ${rangeDisp}; the actual value (${mmHgToDisplay(v.pco2)} ${state.unit}) is lower than even the compensation ceiling — consider a concurrent primary respiratory alkalosis.`,
-                        `Forventet pCO₂ er ${rangeDisp}; den faktiske verdien (${mmHgToDisplay(v.pco2)} ${state.unit}) er lavere enn selve kompensasjonstaket — vurder en samtidig primær respiratorisk alkalose.`);
+      verdictText = tt(`Expected pCO₂ is ${rangeDisp}; the actual value (${mmHgToDisplay(v.pco2)} ${state.unit}) is lower than even the compensation ceiling: consider a concurrent primary respiratory alkalosis.`,
+                        `Forventet pCO₂ er ${rangeDisp}; den faktiske verdien (${mmHgToDisplay(v.pco2)} ${state.unit}) er lavere enn selve kompensasjonstaket: vurder en samtidig primær respiratorisk alkalose.`);
     }
   } else if(primaryKind==="resp-acid" || primaryKind==="comp-resp-acid"){
     const acuteR = acuteRespAcidExpectedHCO3(v.pco2);
@@ -1786,16 +1808,16 @@ function classifyAndAnalyze(v){
     const matchesChronic = within(v.hco3, chronicR);
     if(matchesAcute && !matchesChronic){
       verdict = "uncompensated";
-      verdictText = tt(`Acute buffering alone expects HCO₃⁻ ${fmtRange(acuteR,0)} mmol/L for this pCO₂ — the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that. Renal compensation (which would push HCO₃⁻ to roughly ${fmtRange(chronicR,0)}) hasn't developed yet — this reads as acute.`,
-                        `Akutt buffring alene tilsier en HCO₃⁻ på ${fmtRange(acuteR,0)} mmol/L for denne pCO₂-verdien — den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det. Renal kompensasjon (som ville presset HCO₃⁻ til omtrent ${fmtRange(chronicR,0)}) har ikke rukket å utvikle seg ennå — dette leses som akutt.`);
+      verdictText = tt(`Acute buffering alone expects HCO₃⁻ ${fmtRange(acuteR,0)} mmol/L for this pCO₂: the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that. Renal compensation (which would push HCO₃⁻ to roughly ${fmtRange(chronicR,0)}) hasn't developed yet: this reads as acute.`,
+                        `Akutt buffring alene tilsier en HCO₃⁻ på ${fmtRange(acuteR,0)} mmol/L for denne pCO₂-verdien: den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det. Renal kompensasjon (som ville presset HCO₃⁻ til omtrent ${fmtRange(chronicR,0)}) har ikke rukket å utvikle seg ennå: dette leses som akutt.`);
     } else if(matchesChronic){
       verdict = phState==="normal" ? "full" : "partial";
-      verdictText = tt(`Renal compensation expects HCO₃⁻ ${fmtRange(chronicR,0)} mmol/L for this pCO₂ over several days — the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that, consistent with a chronic process.`,
-                        `Renal kompensasjon tilsier en HCO₃⁻ på ${fmtRange(chronicR,0)} mmol/L for denne pCO₂-verdien over flere dager — den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det, i tråd med en kronisk prosess.`);
+      verdictText = tt(`Renal compensation expects HCO₃⁻ ${fmtRange(chronicR,0)} mmol/L for this pCO₂ over several days: the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that, consistent with a chronic process.`,
+                        `Renal kompensasjon tilsier en HCO₃⁻ på ${fmtRange(chronicR,0)} mmol/L for denne pCO₂-verdien over flere dager: den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det, i tråd med en kronisk prosess.`);
     } else {
       verdict = "mixed";
-      verdictText = tt(`The actual HCO₃⁻ (${fmtNum(v.hco3,0)}) fits neither the acute buffering range (${fmtRange(acuteR,0)}) nor the chronic renal-compensation range (${fmtRange(chronicR,0)}) — consider a concurrent metabolic disorder rather than compensation alone.`,
-                        `Den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) passer verken med det akutte buffringsområdet (${fmtRange(acuteR,0)}) eller det kroniske renale kompensasjonsområdet (${fmtRange(chronicR,0)}) — vurder en samtidig metabolsk forstyrrelse fremfor kompensasjon alene.`);
+      verdictText = tt(`The actual HCO₃⁻ (${fmtNum(v.hco3,0)}) fits neither the acute buffering range (${fmtRange(acuteR,0)}) nor the chronic renal-compensation range (${fmtRange(chronicR,0)}): consider a concurrent metabolic disorder rather than compensation alone.`,
+                        `Den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) passer verken med det akutte buffringsområdet (${fmtRange(acuteR,0)}) eller det kroniske renale kompensasjonsområdet (${fmtRange(chronicR,0)}): vurder en samtidig metabolsk forstyrrelse fremfor kompensasjon alene.`);
     }
   } else if(primaryKind==="resp-alk" || primaryKind==="comp-resp-alk"){
     const acuteR = acuteRespAlkExpectedHCO3(v.pco2);
@@ -1804,22 +1826,22 @@ function classifyAndAnalyze(v){
     const matchesChronic = within(v.hco3, chronicR);
     if(matchesAcute && !matchesChronic){
       verdict = "uncompensated";
-      verdictText = tt(`Acute buffering alone expects HCO₃⁻ ${fmtRange(acuteR,0)} mmol/L for this pCO₂ — the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that. Renal compensation (which would push HCO₃⁻ toward roughly ${fmtRange(chronicR,0)}) hasn't developed yet — this reads as acute.`,
-                        `Akutt buffring alene tilsier en HCO₃⁻ på ${fmtRange(acuteR,0)} mmol/L for denne pCO₂-verdien — den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det. Renal kompensasjon (som ville presset HCO₃⁻ mot omtrent ${fmtRange(chronicR,0)}) har ikke rukket å utvikle seg ennå — dette leses som akutt.`);
+      verdictText = tt(`Acute buffering alone expects HCO₃⁻ ${fmtRange(acuteR,0)} mmol/L for this pCO₂: the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that. Renal compensation (which would push HCO₃⁻ toward roughly ${fmtRange(chronicR,0)}) hasn't developed yet: this reads as acute.`,
+                        `Akutt buffring alene tilsier en HCO₃⁻ på ${fmtRange(acuteR,0)} mmol/L for denne pCO₂-verdien: den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det. Renal kompensasjon (som ville presset HCO₃⁻ mot omtrent ${fmtRange(chronicR,0)}) har ikke rukket å utvikle seg ennå: dette leses som akutt.`);
     } else if(matchesChronic){
       verdict = phState==="normal" ? "full" : "partial";
-      verdictText = tt(`Renal compensation expects HCO₃⁻ ${fmtRange(chronicR,0)} mmol/L for this pCO₂ over several days — the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that, consistent with a chronic process.`,
-                        `Renal kompensasjon tilsier en HCO₃⁻ på ${fmtRange(chronicR,0)} mmol/L for denne pCO₂-verdien over flere dager — den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det, i tråd med en kronisk prosess.`);
+      verdictText = tt(`Renal compensation expects HCO₃⁻ ${fmtRange(chronicR,0)} mmol/L for this pCO₂ over several days: the actual HCO₃⁻ (${fmtNum(v.hco3,0)}) matches that, consistent with a chronic process.`,
+                        `Renal kompensasjon tilsier en HCO₃⁻ på ${fmtRange(chronicR,0)} mmol/L for denne pCO₂-verdien over flere dager: den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) stemmer med det, i tråd med en kronisk prosess.`);
     } else {
       verdict = "mixed";
-      verdictText = tt(`The actual HCO₃⁻ (${fmtNum(v.hco3,0)}) fits neither the acute buffering range (${fmtRange(acuteR,0)}) nor the chronic renal-compensation range (${fmtRange(chronicR,0)}) — consider a concurrent metabolic disorder rather than compensation alone.`,
-                        `Den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) passer verken med det akutte buffringsområdet (${fmtRange(acuteR,0)}) eller det kroniske renale kompensasjonsområdet (${fmtRange(chronicR,0)}) — vurder en samtidig metabolsk forstyrrelse fremfor kompensasjon alene.`);
+      verdictText = tt(`The actual HCO₃⁻ (${fmtNum(v.hco3,0)}) fits neither the acute buffering range (${fmtRange(acuteR,0)}) nor the chronic renal-compensation range (${fmtRange(chronicR,0)}): consider a concurrent metabolic disorder rather than compensation alone.`,
+                        `Den faktiske HCO₃⁻ (${fmtNum(v.hco3,0)}) passer verken med det akutte buffringsområdet (${fmtRange(acuteR,0)}) eller det kroniske renale kompensasjonsområdet (${fmtRange(chronicR,0)}): vurder en samtidig metabolsk forstyrrelse fremfor kompensasjon alene.`);
     }
   } else if(primaryKind==="none"){
     verdict = "normal";
     verdictText = tt("No primary disturbance to compensate for.","Ingen primærforstyrrelse å kompensere for.");
   } else {
-    verdictText = tt("Not enough of a clear pattern to run a compensation check — re-verify the entered values.","Ikke et tydelig nok mønster til å kjøre en kompensasjonssjekk — kontroller de innskrevne verdiene på nytt.");
+    verdictText = tt("Not enough of a clear pattern to run a compensation check: re-verify the entered values.","Ikke et tydelig nok mønster til å kjøre en kompensasjonssjekk: kontroller de innskrevne verdiene på nytt.");
   }
   if(verdictText){
     // Build rule text showing the actual formula applied
@@ -1836,18 +1858,18 @@ function classifyAndAnalyze(v){
     else if(primaryKind==="resp-alk"||primaryKind==="comp-resp-alk")
       compRule = tt("Acute resp. alkalosis: ΔHCO₃⁻ ≈ −2 per 10 mmHg ↓pCO₂ | Chronic: ΔHCO₃⁻ ≈ −4–5 per 10 mmHg ↓pCO₂ (3–5 days)",
                     "Akutt resp. alkalose: ΔHCO₃⁻ ≈ −2 per 10 mmHg ↓pCO₂ | Kronisk: ΔHCO₃⁻ ≈ −4–5 per 10 mmHg ↓pCO₂ (3–5 dager)");
-    steps.push({label:tt("Step 3 — compensation check","Steg 3 — kompensasjonssjekk"), text:verdictText, verdict, rule:compRule});
+    steps.push({label:tt("Step 3: compensation check","Steg 3: kompensasjonssjekk"), text:verdictText, verdict, rule:compRule});
   }
 
-  // STEP 4 — anion gap
+  // STEP 4: anion gap
   let ag = null, agAdj = null, agText = "";
   if(v.na!==null && v.cl!==null){
     ag = v.na - (v.cl + v.hco3);
     agText = `${tt("Anion gap","Anion gap")} = ${fmtNum(v.na,0)} − (${fmtNum(v.cl,0)} + ${fmtNum(v.hco3,0)}) = ${fmtNum(ag,0)} mmol/L.`;
   } else if(v.agInput!==null){
     ag = v.agInput;
-    agText = tt(`Anion gap = ${fmtNum(ag,0)} mmol/L (entered directly — Na⁺/Cl⁻ not provided).`,
-                `Anion gap = ${fmtNum(ag,0)} mmol/L (tastet inn direkte — Na⁺/Cl⁻ ikke oppgitt).`);
+    agText = tt(`Anion gap = ${fmtNum(ag,0)} mmol/L (entered directly: Na⁺/Cl⁻ not provided).`,
+                `Anion gap = ${fmtNum(ag,0)} mmol/L (tastet inn direkte: Na⁺/Cl⁻ ikke oppgitt).`);
   }
   if(ag!==null){
     agAdj = ag;
@@ -1858,9 +1880,9 @@ function classifyAndAnalyze(v){
     }
     const elevated = agAdj > BOUNDS.ag[1];
     agText += elevated
-      ? tt(" That's an elevated gap — look for unmeasured acid anions (ketones, lactate, uremia, toxic alcohols/salicylates).", " Det er et forhøyet gap — se etter umålte syreanioner (ketoner, laktat, uremi, toksiske alkoholer/salisylater).")
+      ? tt(" That's an elevated gap: look for unmeasured acid anions (ketones, lactate, uremia, toxic alcohols/salicylates).", " Det er et forhøyet gap: se etter umålte syreanioner (ketoner, laktat, uremi, toksiske alkoholer/salisylater).")
       : tt(" That's within the normal range.", " Det er innenfor normalområdet.");
-    steps.push({label:tt("Step 4 — anion gap","Steg 4 — anion gap"), text: agText,
+    steps.push({label:tt("Step 4: anion gap","Steg 4: anion gap"), text: agText,
       rule:tt(`AG = Na⁺ − (Cl⁻ + HCO₃⁻) | Normal: ${BOUNDS.ag[0]}–${BOUNDS.ag[1]} mmol/L | Albumin correction: +2.5 per 1 g/dL albumin below 4 g/dL`,
               `AG = Na⁺ − (Cl⁻ + HCO₃⁻) | Normalt: ${BOUNDS.ag[0]}–${BOUNDS.ag[1]} mmol/L | Albuminkorreksjon: +2,5 per 1 g/dL albumin under 4 g/dL`)});
 
@@ -1870,40 +1892,40 @@ function classifyAndAnalyze(v){
       let deltaText = tt(`Delta ratio = (${fmtNum(agAdj,0)} − ${agBase}) / (24 − ${fmtNum(v.hco3,0)}) = ${isFinite(delta)?fmtNum(delta,2):"—"}. `,
                           `Delta-ratio = (${fmtNum(agAdj,0)} − ${agBase}) / (24 − ${fmtNum(v.hco3,0)}) = ${isFinite(delta)?fmtNum(delta,2):"—"}. `);
       if(!isFinite(delta)) deltaText += tt("HCO₃⁻ is at 24, so the ratio can't be calculated.","HCO₃⁻ er på 24, så ratioen kan ikke beregnes.");
-      else if(delta < 0.4) deltaText += tt("Below 0.4 — a concurrent normal-anion-gap process is also pulling HCO₃⁻ down.","Under 0,4 — en samtidig normal-anion-gap-prosess trekker også HCO₃⁻ ned.");
-      else if(delta < 0.8) deltaText += tt("Between 0.4 and 0.8 — a combined high-gap and normal-gap acidosis.","Mellom 0,4 og 0,8 — en kombinert acidose med både høyt og normalt anion gap.");
-      else if(delta <= 2) deltaText += tt("Between 0.8 and 2 — a fairly pure high-anion-gap acidosis; the gap rise and the bicarbonate fall roughly match.","Mellom 0,8 og 2 — en relativt ren acidose med høyt anion gap; økningen i gap og fallet i bikarbonat stemmer noenlunde overens.");
-      else deltaText += tt("Above 2 — HCO₃⁻ hasn't fallen as much as the gap suggests it should, raising the possibility of a pre-existing elevated HCO₃⁻ (chronic respiratory acidosis or a concurrent metabolic alkalosis).","Over 2 — HCO₃⁻ har ikke falt så mye som gapet skulle tilsi, noe som reiser muligheten for en allerede forhøyet HCO₃⁻ (kronisk respiratorisk acidose eller en samtidig metabolsk alkalose).");
-      steps.push({label:tt("Step 4b — delta ratio","Steg 4b — delta-ratio"), text: deltaText,
+      else if(delta < 0.4) deltaText += tt("Below 0.4: a concurrent normal-anion-gap process is also pulling HCO₃⁻ down.","Under 0,4: en samtidig normal-anion-gap-prosess trekker også HCO₃⁻ ned.");
+      else if(delta < 0.8) deltaText += tt("Between 0.4 and 0.8: a combined high-gap and normal-gap acidosis.","Mellom 0,4 og 0,8: en kombinert acidose med både høyt og normalt anion gap.");
+      else if(delta <= 2) deltaText += tt("Between 0.8 and 2: a fairly pure high-anion-gap acidosis; the gap rise and the bicarbonate fall roughly match.","Mellom 0,8 og 2: en relativt ren acidose med høyt anion gap; økningen i gap og fallet i bikarbonat stemmer noenlunde overens.");
+      else deltaText += tt("Above 2: HCO₃⁻ hasn't fallen as much as the gap suggests it should, raising the possibility of a pre-existing elevated HCO₃⁻ (chronic respiratory acidosis or a concurrent metabolic alkalosis).","Over 2: HCO₃⁻ har ikke falt så mye som gapet skulle tilsi, noe som reiser muligheten for en allerede forhøyet HCO₃⁻ (kronisk respiratorisk acidose eller en samtidig metabolsk alkalose).");
+      steps.push({label:tt("Step 4b: delta ratio","Steg 4b: delta-ratio"), text: deltaText,
         rule:tt(`Δ-ratio = (AG − ${agBase}) / (24 − HCO₃⁻) | < 0.4: concurrent normal-AG acidosis | 0.4–0.8: combined | 0.8–2: pure high-AG | > 2: concurrent met. alkalosis`,
                 `Δ-ratio = (AG − ${agBase}) / (24 − HCO₃⁻) | < 0,4: samtidig normal-AG-acidose | 0,4–0,8: kombinert | 0,8–2: rent høy-AG | > 2: samtidig met. alkalose`)});
     }
   }
 
-  // STEP 5 — oxygenation
+  // STEP 5: oxygenation
   if(v.po2!==null){
     let oxyText = tt(`pO₂ is ${mmHgToDisplay(v.po2)} ${state.unit}`, `pO₂ er ${mmHgToDisplay(v.po2)} ${state.unit}`);
     const hypoxemic = v.po2 < BOUNDS.po2[0];
     oxyText += hypoxemic
-      ? tt(` — hypoxemic (below ${mmHgToDisplay(BOUNDS.po2[0])} ${state.unit} reference lower limit).`, ` — hypoksemisk (under nedre referansegrense på ${mmHgToDisplay(BOUNDS.po2[0])} ${state.unit}).`)
-      : tt(" — within the reference range (allow for normal age-related decline).", " — innenfor referanseområdet (ta høyde for normal aldersrelatert nedgang).");
+      ? tt(`: hypoxemic (below ${mmHgToDisplay(BOUNDS.po2[0])} ${state.unit} reference lower limit).`, `: hypoksemisk (under nedre referansegrense på ${mmHgToDisplay(BOUNDS.po2[0])} ${state.unit}).`)
+      : tt(": within the reference range (allow for normal age-related decline).", ": innenfor referanseområdet (ta høyde for normal aldersrelatert nedgang).");
     if(v.fio2!==null && v.fio2>0){
       const pf = v.po2 / (v.fio2/100);
       oxyText += tt(` PaO₂/FiO₂ ratio ≈ ${fmtNum(pf,0)}`, ` PaO₂/FiO₂-ratio ≈ ${fmtNum(pf,0)}`);
-      if(pf<100) oxyText += tt(" — in the range teaching frameworks flag as severe impairment."," — i det området undervisningsrammeverk markerer som alvorlig svikt.");
-      else if(pf<200) oxyText += tt(" — in the range teaching frameworks flag as moderate impairment."," — i det området undervisningsrammeverk markerer som moderat svikt.");
-      else if(pf<300) oxyText += tt(" — in the range teaching frameworks flag as mild impairment."," — i det området undervisningsrammeverk markerer som lett svikt.");
+      if(pf<100) oxyText += tt(": in the range teaching frameworks flag as severe impairment.",": i det området undervisningsrammeverk markerer som alvorlig svikt.");
+      else if(pf<200) oxyText += tt(": in the range teaching frameworks flag as moderate impairment.",": i det området undervisningsrammeverk markerer som moderat svikt.");
+      else if(pf<300) oxyText += tt(": in the range teaching frameworks flag as mild impairment.",": i det området undervisningsrammeverk markerer som lett svikt.");
       else oxyText += tt(", not suggestive of significant gas-exchange impairment.", ", ikke forenlig med betydelig svikt i gassutvekslingen.");
       oxyText += tt(" (A simplified teaching marker, not a diagnostic threshold.)"," (En forenklet undervisningsmarkør, ikke en diagnostisk grenseverdi.)");
     }
-    steps.push({label:tt("Step 5 — oxygenation","Steg 5 — oksygenering"), text: oxyText,
+    steps.push({label:tt("Step 5: oxygenation","Steg 5: oksygenering"), text: oxyText,
       rule:tt(`Hypoxemia: pO₂ < ${mmHgToDisplay(BOUNDS.po2[0])} ${state.unit} (${BOUNDS.po2[0]/MMHG_PER_KPA<10.05?10.0:(BOUNDS.po2[0]/MMHG_PER_KPA).toFixed(1)} kPa) | P/F ratio: < 100 severe, 100–200 moderate, 200–300 mild impairment`,
               `Hypoksemi: pO₂ < ${mmHgToDisplay(BOUNDS.po2[0])} ${state.unit} | P/F-ratio: < 100 alvorlig, 100–200 moderat, 200–300 lett svikt`)});
   }
   if(v.lactate!==null && v.lactate>1.6){
-    steps.push({label:tt("Also note — lactate","Også verdt å merke seg — laktat"), text:tt(
-      `Lactate is ${fmtNum(v.lactate,1)} mmol/L, above the typical 0.5–1.6 reference range. In the right clinical context this points toward tissue hypoperfusion or impaired clearance — trend it rather than anchoring on one value.`,
-      `Laktat er ${fmtNum(v.lactate,1)} mmol/L, over det vanlige referanseområdet 0,5–1,6. I riktig klinisk kontekst peker dette mot vevshypoperfusjon eller redusert clearance — følg trenden fremfor å feste seg ved én enkelt verdi.`
+    steps.push({label:tt("Also note: lactate","Også verdt å merke seg: laktat"), text:tt(
+      `Lactate is ${fmtNum(v.lactate,1)} mmol/L, above the typical 0.5–1.6 reference range. In the right clinical context this points toward tissue hypoperfusion or impaired clearance: trend it rather than anchoring on one value.`,
+      `Laktat er ${fmtNum(v.lactate,1)} mmol/L, over det vanlige referanseområdet 0,5–1,6. I riktig klinisk kontekst peker dette mot vevshypoperfusjon eller redusert clearance: følg trenden fremfor å feste seg ved én enkelt verdi.`
     ), rule:tt("Normal lactate: 0.5–1.6 mmol/L | > 2: likely clinically significant | Trend over time > single value",
                "Normalt laktat: 0,5–1,6 mmol/L | > 2: sannsynlig klinisk betydningsfullt | Trend over tid > enkeltverdien")});
   }
@@ -1916,20 +1938,21 @@ const VERDICT_LABELS_EN = {
   partial:["Partially compensated","verdict-partial"],
   full:["Fully compensated","verdict-full"],
   mixed:["Mixed disorder suspected","verdict-mixed"],
-  normal:["Normal — no disorder","verdict-normal"]
+  normal:["Normal: no disorder","verdict-normal"]
 };
 const VERDICT_LABELS_NO = {
   uncompensated:["Ukompensert","verdict-uncompensated"],
   partial:["Delvis kompensert","verdict-partial"],
   full:["Fullt kompensert","verdict-full"],
   mixed:["Mistanke om blandet forstyrrelse","verdict-mixed"],
-  normal:["Normal — ingen forstyrrelse","verdict-normal"]
+  normal:["Normal: ingen forstyrrelse","verdict-normal"]
 };
 let VERDICT_LABELS = VERDICT_LABELS_EN;
 
 function reportValRow(label, val, decimals, unitSuffix, flag){
   const flagClass = flag==="high" ? "v-high" : flag==="low" ? "v-low" : "v-normal";
-  const arrow = flag==="high" ? '<span class="v-arrow" aria-hidden="true">↑</span>' : flag==="low" ? '<span class="v-arrow" aria-hidden="true">↓</span>' : "";
+  const sym = getFlagSymbol(flag);
+  const arrow = sym ? `<span class="v-arrow" aria-hidden="true">${sym}</span>` : "";
   return `<div class="report-val"><span class="report-val-label">${label}</span><span class="report-val-num ${flagClass}">${arrow}${fmtNum(val,decimals)}${unitSuffix?(" "+unitSuffix):""}</span></div>`;
 }
 function buildValueSummary(v, ag){
@@ -1950,7 +1973,7 @@ function fmtNumLocale(n, decimals){
   const s = Number(n).toFixed(decimals);
   return state.lang==="no" ? s.replace(".", ",") : s;
 }
-function flagArrow(flag){ return flag==="high"?"↑": flag==="low"?"↓":""; }
+function flagArrow(flag){ return getFlagSymbol(flag); }
 
 function buildNoteParts(v, result){
   const parts = [];
@@ -1995,13 +2018,27 @@ function buildAvvikPlain(v, result){
   return parts.map(partToStr).join(", ") + ".";
 }
 
+function applyAbnFormat(innerHtml){
+  let s = innerHtml;
+  if(state.noteBold)      s = `<strong>${s}</strong>`;
+  if(state.noteItalic)    s = `<em>${s}</em>`;
+  if(state.noteUnderline) s = `<u>${s}</u>`;
+  return s;
+}
+
 function buildFullNoteHtml(v, result){
   const s = UI_STRINGS[state.lang];
   const parts = buildNoteParts(v, result);
   const valsHtml = parts.map(p=>{
     const t = partToStr(p).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    if(p.flag==="high") return `<span style="color:#B8741E;font-weight:600">${t}</span>`;
-    if(p.flag==="low")  return `<span style="color:#AE3A48;font-weight:600">${t}</span>`;
+    if(p.flag==="high"){
+      const inner = applyAbnFormat(t);
+      return state.noteColor ? `<span style="color:#B8741E">${inner}</span>` : inner;
+    }
+    if(p.flag==="low"){
+      const inner = applyAbnFormat(t);
+      return state.noteColor ? `<span style="color:#AE3A48">${inner}</span>` : inner;
+    }
     return t;
   }).join(", ");
   let interp = "";
@@ -2012,11 +2049,8 @@ function buildFullNoteHtml(v, result){
 }
 
 function wrapAvvikHtml(plain){
-  let s = plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  if(state.noteBold)      s = `<strong>${s}</strong>`;
-  if(state.noteItalic)    s = `<em>${s}</em>`;
-  if(state.noteUnderline) s = `<u>${s}</u>`;
-  return `<p>${s}</p>`;
+  const s = plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return `<p>${applyAbnFormat(s)}</p>`;
 }
 
 async function copyRichText(htmlStr, plainStr, btn){
@@ -2026,42 +2060,71 @@ async function copyRichText(htmlStr, plainStr, btn){
     btn.textContent = s.cnCopied; btn.classList.add("copied");
     setTimeout(()=>{ btn.textContent=origText; btn.classList.remove("copied"); }, 1800);
   };
+
+  // METHOD 1 — DOM-selection + execCommand (preferred)
+  // The browser's own serializer writes CF_HTML, CF_RTF, and CF_UNICODETEXT
+  // simultaneously, so the result works in Word, WordPad, LibreOffice, and EPJ
+  // systems that only read CF_RTF.
   try{
-    const hb = new Blob([htmlStr], {type:"text/html"});
+    const div = document.createElement("div");
+    div.setAttribute("contenteditable", "true");
+    div.innerHTML = htmlStr;
+    div.style.cssText = [
+      "position:fixed", "left:0", "top:0",
+      "width:1px", "height:1px",
+      "overflow:hidden",
+      "opacity:0.01",           // must not be 0 — some browsers skip layout for invisible elements
+      "pointer-events:none",
+      "white-space:pre-wrap"
+    ].join(";");
+    document.body.appendChild(div);
+    div.focus();
+    const range = document.createRange();
+    range.selectNodeContents(div);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    const success = document.execCommand("copy");
+    sel.removeAllRanges();
+    document.body.removeChild(div);
+    if(success){ ok(); return; }
+  }catch(e1){}
+
+  // METHOD 2 — ClipboardItem API (fallback)
+  // Writes text/html and text/plain only. No CF_RTF, so WordPad and
+  // some EPJ systems will receive unstyled text.
+  try{
+    const hb = new Blob([`<!DOCTYPE html><html><body>${htmlStr}</body></html>`], {type:"text/html"});
     const pb = new Blob([plainStr], {type:"text/plain"});
     await navigator.clipboard.write([new ClipboardItem({"text/html":hb,"text/plain":pb})]);
     ok(); return;
-  }catch(e1){}
-  // DOM selection fallback
-  try{
-    const div = document.createElement("div");
-    div.innerHTML = htmlStr;
-    div.style.cssText = "position:fixed;opacity:0.01;left:-9999px;top:0;pointer-events:none;";
-    document.body.appendChild(div);
-    const range = document.createRange();
-    range.selectNodeContents(div);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    window.getSelection().removeAllRanges();
-    document.body.removeChild(div);
-    ok(); return;
   }catch(e2){}
-  // Plain text last resort
+
+  // METHOD 3 — plain text (last resort, always works)
   try{ await navigator.clipboard.writeText(plainStr); ok(); }catch(e3){}
 }
 
 function updateAvvikDisplay(){
   const el = document.getElementById("cnAvvikText");
-  if(!el) return;
-  el.classList.toggle("is-bold",      state.noteBold);
-  el.classList.toggle("is-italic",    state.noteItalic);
-  el.classList.toggle("is-underline", state.noteUnderline);
+  if(el){
+    el.classList.toggle("is-bold",      state.noteBold);
+    el.classList.toggle("is-italic",    state.noteItalic);
+    el.classList.toggle("is-underline", state.noteUnderline);
+  }
+  // Re-render full note so abnormal values reflect current toggle state
+  if(_lastNoteV && _lastNoteResult){
+    const fullEl = document.getElementById("cnFullText");
+    if(fullEl) fullEl.innerHTML = buildFullNoteHtml(_lastNoteV, _lastNoteResult);
+  }
 }
+
+let _lastNoteV = null, _lastNoteResult = null;
+let _lastAnalyzerV = null, _lastAnalyzerResult = null;
 
 function renderClinicalNote(v, result){
   const box = document.getElementById("clinicalNoteBox");
   if(!box) return;
+  _lastNoteV = v; _lastNoteResult = result;
   box.hidden = false;
 
   // Full note
@@ -2074,15 +2137,16 @@ function renderClinicalNote(v, result){
   document.getElementById("cnAvvikText").textContent = avvikPlain;
   updateAvvikDisplay();
 
-  // Copy full
+  // Copy full (with abnormal values formatted)
   document.getElementById("cnCopyFull").onclick = ()=>{
-    copyRichText(`<!DOCTYPE html><html><body>${fullHtml}</body></html>`, fullPlain,
+    copyRichText(buildFullNoteHtml(_lastNoteV, _lastNoteResult),
+      buildFullNotePlain(_lastNoteV, _lastNoteResult),
       document.getElementById("cnCopyFull"));
   };
-  // Copy avvik (with rich text formatting)
+  // Copy avvik
   document.getElementById("cnCopyAvvik").onclick = ()=>{
-    const avvikHtml = wrapAvvikHtml(avvikPlain);
-    copyRichText(`<!DOCTYPE html><html><body>${avvikHtml}</body></html>`, avvikPlain,
+    copyRichText(wrapAvvikHtml(buildAvvikPlain(_lastNoteV, _lastNoteResult)),
+      buildAvvikPlain(_lastNoteV, _lastNoteResult),
       document.getElementById("cnCopyAvvik"));
   };
 }
@@ -2141,6 +2205,7 @@ function runAnalyzer(){
   }
   hint.textContent = "";
   const result = classifyAndAnalyze(v);
+  _lastAnalyzerV = v; _lastAnalyzerResult = result;
   renderReport(result, v);
   renderClinicalNote(v, result);
 }
@@ -2303,6 +2368,38 @@ document.getElementById("analyzerForm").addEventListener("submit", e=>{
   e.preventDefault();
   runAnalyzer();
 });
+/* -- flag symbol -- */
+function setFlagSymbol(sym){
+  state.flagSymbol = sym;
+  document.querySelectorAll("#symbolOptions .settings-opt").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.sym===sym);
+  });
+  renderPresetGrid();
+  if(_lastNoteV && _lastNoteResult) renderClinicalNote(_lastNoteV, _lastNoteResult);
+  if(_lastAnalyzerV && _lastAnalyzerResult) renderReport(_lastAnalyzerResult, _lastAnalyzerV);
+  try{ localStorage.setItem("abgReader.flagSymbol", sym); }catch(e){}
+}
+document.getElementById("symbolOptions").addEventListener("click", e=>{
+  const btn = e.target.closest(".settings-opt");
+  if(!btn) return;
+  setFlagSymbol(btn.dataset.sym);
+});
+
+/* -- note colour toggle -- */
+function setNoteColor(on){
+  state.noteColor = on;
+  const btn = document.getElementById("cnToggleColor");
+  if(btn){ btn.classList.toggle("active", on); btn.setAttribute("aria-pressed", on); }
+  if(_lastNoteV && _lastNoteResult){
+    const el = document.getElementById("cnFullText");
+    if(el) el.innerHTML = buildFullNoteHtml(_lastNoteV, _lastNoteResult);
+  }
+  try{ localStorage.setItem("abgReader.noteColor", on); }catch(e){}
+}
+document.getElementById("cnToggleColor").addEventListener("click", ()=>{
+  setNoteColor(!state.noteColor);
+});
+
 document.getElementById("analyzeBtn").addEventListener("click", e=>{
   e.preventDefault();
   runAnalyzer();
@@ -2324,6 +2421,7 @@ document.getElementById("analyzeBtn").addEventListener("click", e=>{
 document.getElementById("clearAnalyzer").addEventListener("click", ()=>{
   document.getElementById("analyzerForm").reset();
   document.getElementById("analyzerHint").textContent = "";
+  _lastAnalyzerV = null; _lastAnalyzerResult = null;
   resetAnalyzerReport();
   hideClinicalNote();
 });
@@ -2430,11 +2528,15 @@ document.getElementById("settingsOverlay").addEventListener("click", closeSettin
 
 /* -- load persisted preferences -- */
 let savedUnit = "kPa", savedLang = "en", savedFontTheme = "plex", savedFontSize = "medium";
+let savedFlagSymbol = "arrows", savedNoteColor = true;
 try{
-  savedUnit = localStorage.getItem("abgReader.unit") || savedUnit;
-  savedLang = localStorage.getItem("abgReader.lang") || savedLang;
-  savedFontTheme = localStorage.getItem("abgReader.fontTheme") || savedFontTheme;
-  savedFontSize = localStorage.getItem("abgReader.fontSize") || savedFontSize;
+  savedUnit       = localStorage.getItem("abgReader.unit")       || savedUnit;
+  savedLang       = localStorage.getItem("abgReader.lang")       || savedLang;
+  savedFontTheme  = localStorage.getItem("abgReader.fontTheme")  || savedFontTheme;
+  savedFontSize   = localStorage.getItem("abgReader.fontSize")   || savedFontSize;
+  savedFlagSymbol = localStorage.getItem("abgReader.flagSymbol") || savedFlagSymbol;
+  const sc = localStorage.getItem("abgReader.noteColor");
+  if(sc !== null) savedNoteColor = sc === "true";
 }catch(e){}
 
 renderParamGrid();
@@ -2449,6 +2551,8 @@ setUnit(savedUnit);
 setLang(savedLang);
 setFontTheme(savedFontTheme);
 setFontSize(savedFontSize);
+setFlagSymbol(savedFlagSymbol);
+setNoteColor(savedNoteColor);
 </script>
 </body>
 </html>
