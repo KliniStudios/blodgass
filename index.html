@@ -390,6 +390,27 @@ main{max-width:var(--maxw); margin:0 auto; padding:0 28px 80px;}
 .cn-text.is-underline{text-decoration:underline;}
 .cn-high{color:var(--amber); font-weight:600;}
 .cn-low{color:var(--rose); font-weight:600;}
+.cn-seg{display:flex; align-items:center; gap:4px; flex-wrap:wrap;}
+.cn-seg-label{font-size:11px; color:var(--ink-soft); margin-right:2px;}
+.cn-seg-btn{
+  font-family:var(--font-mono); font-size:11px; padding:4px 8px; border-radius:5px;
+  border:1px solid var(--line-strong); background:transparent; color:var(--ink-soft); cursor:pointer;
+  transition:background 0.12s, color 0.12s, border-color 0.12s;
+}
+.cn-seg-btn:hover{border-color:var(--teal);}
+.cn-seg-btn.active{background:var(--teal); color:#fff; border-color:var(--teal);}
+
+/* -- anion gap field -- */
+.ag-badge{
+  font-family:var(--font-mono); font-size:9.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em;
+  background:var(--teal-pale); color:var(--teal-deep); border:1px solid var(--teal); border-radius:3px; padding:0 4px;
+}
+.ag-badge[hidden]{display:none;}
+.field input.is-calc{background:var(--teal-pale); color:var(--teal-deep); font-style:italic;}
+.ag-calc-info{font-size:11px; line-height:1.35; color:var(--ink-soft);}
+.ag-calc-info:empty{display:none;}
+.switch-row{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; user-select:none;}
+.switch-row input{accent-color:var(--teal); width:16px; height:16px; margin:0; cursor:pointer;}
 
 
 .comp-table-wrap{overflow-x:auto; margin-bottom:24px; border:1px solid var(--line); border-radius:var(--radius-m); background:var(--panel);}
@@ -702,15 +723,20 @@ body.fs-xlarge{zoom:1.32;}
               <input type="text" inputmode="decimal" id="in_k" placeholder="3.5–4.4">
             </label>
             <label class="field" for="in_alb">
-              <span class="field-label" data-i18n="fieldLabelAlbumin">Albumin <span class="field-unit">g/dL</span></span>
-              <input type="text" inputmode="decimal" id="in_alb" placeholder="3.5–5.0">
+              <span class="field-label" data-i18n="fieldLabelAlbumin">Albumin <span class="field-unit">g/L</span></span>
+              <input type="text" inputmode="decimal" id="in_alb" placeholder="35–50">
             </label>
             <label class="field" for="in_ag">
-              <span class="field-label" data-i18n="fieldLabelAG">Anion gap <span class="field-unit">mmol/L</span></span>
-              <input type="text" inputmode="decimal" id="in_ag" placeholder="10–16">
+              <span class="field-label"><span data-i18n="fieldLabelAG">Anion gap <span class="field-unit">mmol/L</span></span> <span class="ag-badge" id="agBadge" hidden>beregnet</span></span>
+              <input type="text" inputmode="decimal" id="in_ag" placeholder="8–16">
+              <span class="ag-calc-info" id="agCalcInfo" aria-live="polite"></span>
             </label>
           </div>
-          <p class="settings-sublabel" data-i18n="agFieldNote">If Na⁺ and Cl⁻ are filled in, the anion gap is calculated from them and this field is ignored. Leave Na⁺/Cl⁻ blank to use a directly entered anion gap instead.</p>
+          <label class="switch-row" for="in_agK">
+            <input type="checkbox" id="in_agK">
+            <span data-i18n="agIncludeK">Ta med K⁺ i anion gap: (Na⁺ + K⁺) − (Cl⁻ + HCO₃⁻)</span>
+          </label>
+          <p class="settings-sublabel" data-i18n="agFieldNote">Anion gap is calculated automatically.</p>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn-primary" id="analyzeBtn" data-i18n="btnAnalyze">Analyze</button>
@@ -736,6 +762,11 @@ body.fs-xlarge{zoom:1.32;}
             <button type="button" class="cn-toggle tk" id="cnToggleItalic" title="Kursiv" aria-pressed="false">K</button>
             <button type="button" class="cn-toggle tf active" id="cnToggleBold"   title="Fet"    aria-pressed="true">F</button>
             <button type="button" class="cn-toggle tu" id="cnToggleUnder"  title="Understrek" aria-pressed="false">U</button>
+          </div>
+          <div class="cn-seg" id="cnFlagStyle" role="group">
+            <span class="cn-seg-label" data-i18n="cnFlagStyleLabel">Vis avvik som:</span>
+            <button type="button" class="cn-seg-btn active" data-flagstyle="words" data-i18n="cnFlagWords">ord (forhøyet/redusert)</button>
+            <button type="button" class="cn-seg-btn" data-flagstyle="symbols" data-i18n="cnFlagArrows">piler (↑/↓)</button>
           </div>
           <button type="button" class="cn-copy" id="cnCopyFull" data-i18n="cnCopy">Kopier</button>
         </div>
@@ -793,7 +824,7 @@ body.fs-xlarge{zoom:1.32;}
 <footer class="footer">
   <div class="wrap footer-inner">
     <p class="footer-disclaimer" data-i18n="footerDisclaimer"><strong>Educational tool, not a clinical device.</strong> Reference ranges and worked cases are illustrative teaching material. They are not validated for diagnosis or treatment, do not replace your institution's laboratory ranges or a supervising clinician, and should never be the sole basis for a patient-care decision.</p>
-    <p class="footer-meta" data-i18n="footerMeta">ABG Reader: blodgasstolkning.</p>
+    <p class="footer-meta" data-i18n="footerMeta">ABG Reader: blodgasstolkning · 20.10.2026</p>
   </div>
 </footer>
 
@@ -833,9 +864,16 @@ const UI_STRINGS = {
     fieldLabelLactate:'Lactate <span class="field-unit">mmol/L</span>',
     formSectionElectrolytes:'Electrolytes <span class="optional-tag" data-i18n="optionalTagAG">optional; unlocks anion gap</span>',
     optionalTagAG:"optional; unlocks anion gap or enter directly",
-    fieldLabelAlbumin:'Albumin <span class="field-unit">g/dL</span>',
+    fieldLabelAlbumin:'Albumin <span class="field-unit">g/L</span>',
     fieldLabelAG:'Anion gap <span class="field-unit">mmol/L</span>',
-    agFieldNote:"If Na⁺ and Cl⁻ are filled in, the anion gap is calculated from them and this field is ignored. Leave Na⁺/Cl⁻ blank to use a directly entered anion gap instead.",
+    agFieldNote:"The anion gap is calculated automatically from Na⁺, Cl⁻ and actual HCO₃⁻ (cHCO₃⁻(P), not standard bicarbonate or BE) and marked “calculated”. A value you type yourself is always used and never overwritten; clear the field to let the calculation take over again. Albumin in g/L adds an albumin-corrected AG.",
+    agBadge:"calculated",
+    agCalcInfo:"Calculated from electrolytes:",
+    agNeedK:"Enter K⁺ to calculate with K⁺.",
+    agIncludeK:"Include K⁺ in anion gap: (Na⁺ + K⁺) − (Cl⁻ + HCO₃⁻)",
+    cnFlagStyleLabel:"Show abnormal as:",
+    cnFlagWords:"words (elevated/reduced)",
+    cnFlagArrows:"arrows (↑/↓)",
     btnAnalyze:"Analyze", btnClear:"Clear",
     reportEmptyEyebrow:"Awaiting values",
     reportEmptyText:"Run a case from the Presets tab, or enter your own numbers and press Analyze. The reasoning will print here, line by line, the way a worked answer would.",
@@ -844,7 +882,7 @@ const UI_STRINGS = {
     sourcesH2:"What this is built on",
     sourcesIntro:"Reference ranges, compensation formulas, and the anion-gap teaching here reflect long-standing, widely replicated clinical physiology rather than any single proprietary text. The sources below are cited for attribution and further reading.",
     footerDisclaimer:"<strong>Educational tool, not a clinical device.</strong> Reference ranges and worked cases are illustrative teaching material. They are not validated for diagnosis or treatment, do not replace your institution's laboratory ranges or a supervising clinician, and should never be the sole basis for a patient-care decision.",
-    footerMeta:"ABG Reader: blodgasstolkning.",
+    footerMeta:"ABG Reader: blodgasstolkning · 20.10.2026",
     analyzerHintRequired:"pH, pCO₂, and HCO₃⁻ are required to run the analysis.",
     analyzerHintMissing:"Required: ",
     cnTitleNote:"ABG: clinical note",
@@ -886,9 +924,16 @@ const UI_STRINGS = {
     fieldLabelLactate:'Laktat <span class="field-unit">mmol/L</span>',
     formSectionElectrolytes:'Elektrolytter <span class="optional-tag" data-i18n="optionalTagAG">valgfritt; låser opp anion gap</span>',
     optionalTagAG:"valgfritt; låser opp anion gap eller tast direkte",
-    fieldLabelAlbumin:'Albumin <span class="field-unit">g/dL</span>',
+    fieldLabelAlbumin:'Albumin <span class="field-unit">g/L</span>',
     fieldLabelAG:'Anion gap <span class="field-unit">mmol/L</span>',
-    agFieldNote:"Hvis Na⁺ og Cl⁻ er fylt ut, beregnes anion gap fra dem og dette feltet ignoreres. La Na⁺/Cl⁻ stå tomt for å bruke et direkte innskrevet anion gap i stedet.",
+    agFieldNote:"Anion gap beregnes automatisk fra Na⁺, Cl⁻ og aktuelt HCO₃⁻ (cHCO₃⁻(P), ikke standard bikarbonat eller BE) og merkes «beregnet». En verdi du skriver inn selv, brukes alltid og overskrives aldri; tøm feltet for å la beregningen ta over igjen. Albumin i g/L gir i tillegg albuminkorrigert AG.",
+    agBadge:"beregnet",
+    agCalcInfo:"Beregnet fra elektrolyttene:",
+    agNeedK:"Fyll inn K⁺ for å beregne med K⁺.",
+    agIncludeK:"Ta med K⁺ i anion gap: (Na⁺ + K⁺) − (Cl⁻ + HCO₃⁻)",
+    cnFlagStyleLabel:"Vis avvik som:",
+    cnFlagWords:"ord (forhøyet/redusert)",
+    cnFlagArrows:"piler (↑/↓)",
     btnAnalyze:"Analyser", btnClear:"Tøm",
     reportEmptyEyebrow:"Venter på verdier",
     reportEmptyText:"Kjør et kasus fra Kasus-fanen, eller tast inn egne tall og trykk Analyser. Resonnementet skrives ut her, linje for linje, slik en gjennomgått besvarelse ville sett ut.",
@@ -897,7 +942,7 @@ const UI_STRINGS = {
     sourcesH2:"Hva dette er bygget på",
     sourcesIntro:"Referanseområdene, kompensasjonsformlene og undervisningen om anion gap her gjenspeiler langvarig, mye etterprøvd klinisk fysiologi fremfor én enkelt kilde. Kildene under er oppgitt for etterrettelighet og videre lesning.",
     footerDisclaimer:"<strong>Pedagogisk verktøy, ikke et klinisk hjelpemiddel.</strong> Referanseområder og gjennomgåtte kasus er illustrerende undervisningsmateriell. De er ikke validert for diagnostikk eller behandling, erstatter ikke din institusjons laboratorieverdier eller en ansvarlig kliniker, og skal aldri være eneste grunnlag for en pasientbehandlingsbeslutning.",
-    footerMeta:"ABG Reader: blodgasstolkning.",
+    footerMeta:"ABG Reader: blodgasstolkning · 20.10.2026",
     analyzerHintRequired:"pH, pCO₂ og HCO₃⁻ må fylles ut for å kjøre analysen.",
     analyzerHintMissing:"Påkrevd: ",
     cnTitleNote:"Blodgass: klinisk notat",
@@ -1008,11 +1053,11 @@ const PARAMS_EN = {
   },
   ag: {
     name:"Anion Gap", abbr:"Na⁺ − (Cl⁻ + HCO₃⁻)", unit:"conc", order:7,
-    normalText:"10–16 mmol/L",
+    normalText:"8–16 mmol/L (10–20 with K⁺)",
     desc:"Estimates unmeasured anions in the blood. It exists to split metabolic acidosis into two mechanistically different buckets: and it depends on the Na⁺, Cl⁻, and HCO₃⁻ shown below.",
     high:"Unmeasured acid anions are present: ketoacidosis, lactic acidosis, uremia/renal failure, or toxic ingestions (methanol, ethylene glycol, salicylates). Often grouped under the mnemonic GOLDMARK.",
     low:"Usually a normal-anion-gap (hyperchloremic) acidosis instead: bicarbonate is lost directly or diluted while chloride rises to compensate, as in diarrhea, renal tubular acidosis, or large-volume saline resuscitation.",
-    normalNote:"Correct for albumin before trusting a normal gap: each 1 g/dL drop in albumin below 4 g/dL lowers the expected gap by about 2.5 mmol/L, which can mask a real elevation in hypoalbuminemic patients.",
+    normalNote:"Correct for albumin before trusting a normal gap: each 10 g/L drop in albumin below 40 g/L lowers the expected gap by about 2.5 mmol/L (corrected AG = AG + 0.25 × (40 − albumin g/L)), which can mask a real elevation in hypoalbuminemic patients. The reference range is laboratory-dependent: roughly 8–16 mmol/L without K⁺ and 10–20 mmol/L with K⁺.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
       {label:"Kraut & Madias, CJASN 2007", url:"https://doi.org/10.2215/CJN.03790907"},
@@ -1200,11 +1245,11 @@ const PARAMS_NO = {
   },
   ag: {
     name:"Anion Gap", abbr:"Na⁺ − (Cl⁻ + HCO₃⁻)", unit:"conc", order:7,
-    normalText:"10–16 mmol/L",
+    normalText:"8–16 mmol/L (10–20 med K⁺)",
     desc:"Estimerer umålte anioner i blodet. Hensikten er å dele metabolsk acidose inn i to mekanistisk ulike grupper: og det avhenger av Na⁺, Cl⁻ og HCO₃⁻ vist under.",
     high:"Umålte syreanioner er til stede: ketoacidose, laktacidose, uremi/nyresvikt, eller forgiftning (metanol, etylenglykol, salisylater). Ofte gruppert under huskeregelen GOLDMARK.",
     low:"Som regel en normal-anion-gap (hyperkloremisk) acidose i stedet: bikarbonat tapes direkte eller fortynnes mens klorid stiger som motsvar, som ved diaré, renal tubulær acidose eller store mengder saltvannsinfusjon.",
-    normalNote:"Korriger for albumin før du stoler på et normalt gap: hvert fall i albumin på 1 g/dL under 4 g/dL senker forventet gap med omtrent 2,5 mmol/L, noe som kan maskere en reell forhøyelse hos pasienter med hypoalbuminemi.",
+    normalNote:"Korriger for albumin før du stoler på et normalt gap: hvert fall i albumin på 10 g/L under 40 g/L senker forventet gap med omtrent 2,5 mmol/L (korrigert AG = AG + 0,25 × (40 − albumin g/L)), noe som kan maskere en reell forhøyelse hos pasienter med hypoalbuminemi. Referanseområdet er laboratorieavhengig: ca. 8–16 mmol/L uten K⁺ og ca. 10–20 mmol/L med K⁺.",
     links:[
       {label:"Opdahl, H. & Nordseth, T. (u.å.). Blodgasser. Store medisinske leksikon.", url:"https://sml.snl.no/blodgasser"},
       {label:"Kraut & Madias, CJASN 2007", url:"https://doi.org/10.2215/CJN.03790907"},
@@ -1510,6 +1555,8 @@ const state = {
   noteUnderline: false,
   noteColor: true,
   flagSymbol: "arrows",
+  noteFlagStyle: "words",   // "words" (forhøyet/redusert) | "symbols" (↑/↓ from flagSymbol)
+  agIncludeK: false,
   activeTab: "panel-reference",
   openTooltipBtn: null
 };
@@ -1547,9 +1594,24 @@ function normalRangeText(id){
   }
   return p.normalText;
 }
+/* ===== ANION GAP ===== */
+// Reference range follows the chosen formula (laboratory-dependent).
+function agBounds(){ return state.agIncludeK ? [10,20] : [8,16]; }
+function agFormulaLabel(){ return state.agIncludeK ? "(Na + K) − (Cl + HCO₃)" : "Na − (Cl + HCO₃)"; }
+// Uses actual HCO₃⁻ (cHCO₃⁻(P)), never standard bicarbonate or BE.
+function calcAnionGap(na, cl, hco3, k){
+  if(na===null || na===undefined || cl===null || cl===undefined || hco3===null || hco3===undefined) return null;
+  if(state.agIncludeK){
+    if(k===null || k===undefined) return null;
+    return (na + k) - (cl + hco3);
+  }
+  return na - (cl + hco3);
+}
+function fmtAgField(x){ return String(Math.round(x*10)/10); }
+
 function getFlag(id, val){
   if(val===null || val===undefined || isNaN(val)) return null;
-  const b = BOUNDS[id];
+  const b = id==="ag" ? agBounds() : BOUNDS[id];
   if(!b) return null;
   if(val < b[0]) return "low";
   if(val > b[1]) return "high";
@@ -1607,8 +1669,7 @@ function renderElectrolyteRow(){
 
 /* ===== RENDER: PRESETS ===== */
 function presetAG(values){
-  if(values.na===undefined || values.cl===undefined) return null;
-  return values.na - (values.cl + values.hco3);
+  return calcAnionGap(values.na, values.cl, values.hco3, values.k);
 }
 const FLAG_SYMBOLS = {
   arrows:    {high:"↑",   low:"↓"},
@@ -1675,8 +1736,9 @@ function updatePlaceholders(){
   document.getElementById("in_na").placeholder = "137–145";
   document.getElementById("in_cl").placeholder = "98–107";
   document.getElementById("in_k").placeholder = "3.5–4.4";
-  document.getElementById("in_alb").placeholder = "3.5–5.0";
-  document.getElementById("in_ag").placeholder = "10–16";
+  document.getElementById("in_alb").placeholder = "35–50";
+  const agb = agBounds();
+  document.getElementById("in_ag").placeholder = agb[0] + "–" + agb[1];
 }
 
 // Compensation formulas (all internal math in mmHg / mmol per L)
@@ -1689,24 +1751,25 @@ function chronicRespAlkExpectedHCO3(pco2){ const c = 24 - 4.5*((40-pco2)/10); re
 function within(val, range){ return val>=range[0] && val<=range[1]; }
 function fmtRange(range, decimals){ return fmtNum(range[0],decimals) + "–" + fmtNum(range[1],decimals); }
 
+// Robust parse: handle both "7.22" and "7,22" (Norwegian locale), strip whitespace/non-numeric chars
+function parseNumField(id){
+  const el = document.getElementById(id);
+  if(!el) return null;
+  let raw = el.value.trim();
+  if(raw === "") return null;
+  if(raw.indexOf(",") !== -1 && raw.indexOf(".") !== -1){
+    // e.g. "1.234,5" → European thousands: strip dots, replace comma with dot
+    raw = raw.replace(/\./g, "").replace(",", ".");
+  } else {
+    raw = raw.replace(",", ".");
+  }
+  raw = raw.replace(/[^\d.\-]/g, "");
+  const n = parseFloat(raw);
+  return isNaN(n) ? null : n;
+}
+
 function gatherAnalyzerInputs(){
-  // Robust parse: handle both "7.22" and "7,22" (Norwegian locale), strip whitespace/non-numeric chars
-  const num = id => {
-    let raw = document.getElementById(id).value.trim();
-    if(raw === "") return null;
-    // Normalise: replace comma-decimal → dot-decimal, strip anything not digit/dot/minus
-    // Handle both "7,22" and "7.22": if there are both comma and dot, treat last one as decimal
-    if(raw.indexOf(",") !== -1 && raw.indexOf(".") !== -1){
-      // e.g. "1.234,5" → European thousands: strip dots, replace comma with dot
-      raw = raw.replace(/\./g, "").replace(",", ".");
-    } else {
-      raw = raw.replace(",", ".");
-    }
-    // Strip anything except digits, dot, and leading minus
-    raw = raw.replace(/[^\d.\-]/g, "");
-    const n = parseFloat(raw);
-    return isNaN(n) ? null : n;
-  };
+  const num = parseNumField;
   const ph = num("in_ph");
   let pco2 = num("in_pco2"); if(pco2!==null) pco2 = inputToMmHg(pco2);
   const hco3 = num("in_hco3");
@@ -1720,7 +1783,47 @@ function gatherAnalyzerInputs(){
   const k = num("in_k");
   const alb = num("in_alb");
   const agInput = num("in_ag");
-  return {ph,pco2,hco3,be,po2,sao2,fio2,lactate,na,cl,k,alb,agInput};
+  // A number the user typed in the AG field always wins over the calculation.
+  const agManual = document.getElementById("in_ag").dataset.manual === "1" && agInput !== null;
+  return {ph,pco2,hco3,be,po2,sao2,fio2,lactate,na,cl,k,alb,agInput,agManual};
+}
+
+function resolveAnionGap(v){
+  if(v.agManual) return {value:v.agInput, source:"manual"};
+  const c = calcAnionGap(v.na, v.cl, v.hco3, v.k);
+  return c===null ? null : {value:c, source:"calc", formula:agFormulaLabel()};
+}
+
+/* -- AG field: calculated vs. manual -- */
+function refreshAgField(){
+  const el = document.getElementById("in_ag");
+  if(!el) return;
+  const badge = document.getElementById("agBadge");
+  const info = document.getElementById("agCalcInfo");
+  const s = UI_STRINGS[state.lang];
+  const na = parseNumField("in_na"), cl = parseNumField("in_cl");
+  const k = parseNumField("in_k"), hco3 = parseNumField("in_hco3");
+  const calc = calcAnionGap(na, cl, hco3, k);
+  const needK = state.agIncludeK && na!==null && cl!==null && hco3!==null && k===null;
+  badge.textContent = s.agBadge;
+  if(el.dataset.manual==="1" && el.value.trim()!==""){
+    // Manual value wins; show the calculated one only as information next to the field.
+    el.classList.remove("is-calc");
+    badge.hidden = true;
+    info.textContent = calc!==null ? `${s.agCalcInfo} ${fmtAgField(calc)} mmol/L (${agFormulaLabel()})` : "";
+  } else {
+    el.dataset.manual = "";
+    if(calc!==null){ el.value = fmtAgField(calc); el.classList.add("is-calc"); badge.hidden = false; }
+    else { el.value = ""; el.classList.remove("is-calc"); badge.hidden = true; }
+    info.textContent = needK ? s.agNeedK : "";
+  }
+}
+function resetAgFieldState(){
+  const el = document.getElementById("in_ag");
+  if(el) el.dataset.manual = "";
+  const kBox = document.getElementById("in_agK");
+  if(kBox) kBox.checked = state.agIncludeK;
+  refreshAgField();
 }
 
 function classifyAndAnalyze(v){
@@ -1862,35 +1965,38 @@ function classifyAndAnalyze(v){
   }
 
   // STEP 4: anion gap
-  let ag = null, agAdj = null, agText = "";
-  if(v.na!==null && v.cl!==null){
-    ag = v.na - (v.cl + v.hco3);
-    agText = `${tt("Anion gap","Anion gap")} = ${fmtNum(v.na,0)} − (${fmtNum(v.cl,0)} + ${fmtNum(v.hco3,0)}) = ${fmtNum(ag,0)} mmol/L.`;
-  } else if(v.agInput!==null){
-    ag = v.agInput;
-    agText = tt(`Anion gap = ${fmtNum(ag,0)} mmol/L (entered directly: Na⁺/Cl⁻ not provided).`,
-                `Anion gap = ${fmtNum(ag,0)} mmol/L (tastet inn direkte: Na⁺/Cl⁻ ikke oppgitt).`);
-  }
-  if(ag!==null){
-    agAdj = ag;
-    if(v.alb!==null){
-      agAdj = ag + 2.5*(4 - v.alb);
-      agText += tt(` Corrected for an albumin of ${fmtNum(v.alb,1)} g/dL: ${fmtNum(agAdj,0)} mmol/L.`,
-                    ` Korrigert for en albumin på ${fmtNum(v.alb,1)} g/dL: ${fmtNum(agAdj,0)} mmol/L.`);
+  const agInfo = resolveAnionGap(v);
+  const fx = x => fmtNum(x, Number.isInteger(x) ? 0 : 1);
+  let ag = null, agCorr = null, agText = "";
+  if(agInfo){
+    ag = agInfo.value;
+    const agb = agBounds();
+    if(agInfo.source==="calc"){
+      const left = state.agIncludeK ? `(${fx(v.na)} + ${fx(v.k)})` : fx(v.na);
+      agText = `Anion gap = ${left} − (${fx(v.cl)} + ${fx(v.hco3)}) = ${fmtNum(ag,0)} mmol/L ${tt("(calculated: ","(beregnet: ")}${agInfo.formula}).`;
+    } else {
+      agText = tt(`Anion gap = ${fmtNum(ag,0)} mmol/L (entered manually; used as entered).`,
+                  `Anion gap = ${fmtNum(ag,0)} mmol/L (innskrevet manuelt; brukes som oppgitt).`);
     }
-    const elevated = agAdj > BOUNDS.ag[1];
+    if(v.alb!==null){
+      agCorr = ag + 0.25*(40 - v.alb);
+      agText += tt(` Albumin-corrected for an albumin of ${fx(v.alb)} g/L: ${fmtNum(agCorr,0)} mmol/L.`,
+                   ` Albuminkorrigert for albumin ${fx(v.alb)} g/L: ${fmtNum(agCorr,0)} mmol/L.`);
+    }
+    const agEval = agCorr!==null ? agCorr : ag;
+    const elevated = agEval > agb[1];
     agText += elevated
       ? tt(" That's an elevated gap: look for unmeasured acid anions (ketones, lactate, uremia, toxic alcohols/salicylates).", " Det er et forhøyet gap: se etter umålte syreanioner (ketoner, laktat, uremi, toksiske alkoholer/salisylater).")
       : tt(" That's within the normal range.", " Det er innenfor normalområdet.");
     steps.push({label:tt("Step 4: anion gap","Steg 4: anion gap"), text: agText,
-      rule:tt(`AG = Na⁺ − (Cl⁻ + HCO₃⁻) | Normal: ${BOUNDS.ag[0]}–${BOUNDS.ag[1]} mmol/L | Albumin correction: +2.5 per 1 g/dL albumin below 4 g/dL`,
-              `AG = Na⁺ − (Cl⁻ + HCO₃⁻) | Normalt: ${BOUNDS.ag[0]}–${BOUNDS.ag[1]} mmol/L | Albuminkorreksjon: +2,5 per 1 g/dL albumin under 4 g/dL`)});
+      rule:tt(`AG = ${agFormulaLabel()} | Normal: ${agb[0]}–${agb[1]} mmol/L (laboratory-dependent) | Albumin-corrected AG = AG + 0.25 × (40 − albumin g/L)`,
+              `AG = ${agFormulaLabel()} | Normalt: ${agb[0]}–${agb[1]} mmol/L (laboratorieavhengig) | Albuminkorrigert AG = AG + 0,25 × (40 − albumin g/L)`)});
 
     if(elevated && (primaryKind==="met-acid" || primaryKind==="mixed-acid")){
-      const agBase = BOUNDS.ag[1];
-      const delta = (agAdj-agBase)/(24-v.hco3);
-      let deltaText = tt(`Delta ratio = (${fmtNum(agAdj,0)} − ${agBase}) / (24 − ${fmtNum(v.hco3,0)}) = ${isFinite(delta)?fmtNum(delta,2):"—"}. `,
-                          `Delta-ratio = (${fmtNum(agAdj,0)} − ${agBase}) / (24 − ${fmtNum(v.hco3,0)}) = ${isFinite(delta)?fmtNum(delta,2):"—"}. `);
+      const agBase = (agb[0]+agb[1])/2;   // midpoint of the active reference range
+      const delta = (agEval-agBase)/(24-v.hco3);
+      let deltaText = tt(`Delta ratio = (${fmtNum(agEval,0)} − ${agBase}) / (24 − ${fmtNum(v.hco3,0)}) = ${isFinite(delta)?fmtNum(delta,2):"—"}. `,
+                          `Delta-ratio = (${fmtNum(agEval,0)} − ${agBase}) / (24 − ${fmtNum(v.hco3,0)}) = ${isFinite(delta)?fmtNum(delta,2):"—"}. `);
       if(!isFinite(delta)) deltaText += tt("HCO₃⁻ is at 24, so the ratio can't be calculated.","HCO₃⁻ er på 24, så ratioen kan ikke beregnes.");
       else if(delta < 0.4) deltaText += tt("Below 0.4: a concurrent normal-anion-gap process is also pulling HCO₃⁻ down.","Under 0,4: en samtidig normal-anion-gap-prosess trekker også HCO₃⁻ ned.");
       else if(delta < 0.8) deltaText += tt("Between 0.4 and 0.8: a combined high-gap and normal-gap acidosis.","Mellom 0,4 og 0,8: en kombinert acidose med både høyt og normalt anion gap.");
@@ -1930,7 +2036,9 @@ function classifyAndAnalyze(v){
                "Normalt laktat: 0,5–1,6 mmol/L | > 2: sannsynlig klinisk betydningsfullt | Trend over tid > enkeltverdien")});
   }
 
-  return {steps, verdict, phState, ag: agAdj};
+  return {steps, verdict, phState, ag, agCorr,
+    agSource: agInfo ? agInfo.source : null,
+    agFormula: agInfo && agInfo.formula ? agInfo.formula : null};
 }
 
 const VERDICT_LABELS_EN = {
@@ -1955,7 +2063,7 @@ function reportValRow(label, val, decimals, unitSuffix, flag){
   const arrow = sym ? `<span class="v-arrow" aria-hidden="true">${sym}</span>` : "";
   return `<div class="report-val"><span class="report-val-label">${label}</span><span class="report-val-num ${flagClass}">${arrow}${fmtNum(val,decimals)}${unitSuffix?(" "+unitSuffix):""}</span></div>`;
 }
-function buildValueSummary(v, ag){
+function buildValueSummary(v, ag, agCorr){
   const rows = [];
   rows.push(reportValRow("pH", v.ph, 2, "", getFlag("ph", v.ph)));
   rows.push(reportValRow("pCO₂", Number(mmHgToDisplay(v.pco2)), state.unit==="kPa"?1:0, state.unit, getFlag("pco2", v.pco2)));
@@ -1965,6 +2073,7 @@ function buildValueSummary(v, ag){
   if(v.sao2!==null) rows.push(reportValRow("SaO₂", v.sao2, 0, "%", getFlag("sao2", v.sao2)));
   if(v.lactate!==null) rows.push(reportValRow(UI_STRINGS[state.lang].valRowLactate, v.lactate, 1, "mmol/L", getFlag("lactate", v.lactate)));
   if(ag!==null) rows.push(reportValRow("AG", ag, 0, "mmol/L", getFlag("ag", ag)));
+  if(agCorr!==null && agCorr!==undefined) rows.push(reportValRow(state.lang==="no"?"AG korr.":"AG corr.", agCorr, 0, "mmol/L", getFlag("ag", agCorr)));
   return `<div class="report-values">${rows.join("")}</div>`;
 }
 
@@ -1977,11 +2086,12 @@ function flagArrow(flag){ return getFlagSymbol(flag); }
 
 function buildNoteParts(v, result){
   const parts = [];
-  const push = (param, rawVal, displayVal, unit, id) => {
+  const push = (param, rawVal, displayVal, unit, id, note) => {
     if(rawVal===null||rawVal===undefined) return;
     const flag = id ? getFlag(id, rawVal) : "normal";
-    parts.push({param, display:displayVal, unit, flag});
+    parts.push({param, display:displayVal, unit, flag, note: note || ""});
   };
+  const no = state.lang==="no";
   push("pH",                 v.ph,       fmtNumLocale(v.ph,2),                "",         "ph");
   push("pCO₂",               v.pco2,     mmHgToDisplay(v.pco2),               state.unit, "pco2");
   push("HCO₃⁻",              v.hco3,     fmtNumLocale(v.hco3,0),              "mmol/L",   "hco3");
@@ -1990,14 +2100,29 @@ function buildNoteParts(v, result){
   if(v.sao2!==null)   push("SaO₂",   v.sao2,     fmtNumLocale(v.sao2,1),     "%",        "sao2");
   const lacLabel = state.lang==="no" ? "Laktat" : "Lactate";
   if(v.lactate!==null) push(lacLabel, v.lactate, fmtNumLocale(v.lactate,1),   "mmol/L",   "lactate");
-  if(result.ag!==null) push("AG",    result.ag,  fmtNumLocale(result.ag,0),   "mmol/L",   "ag");
+  if(result.ag!==null && result.ag!==undefined){
+    const agNote = result.agSource==="calc"
+      ? (no ? "beregnet: " : "calculated: ") + (result.agFormula || agFormulaLabel())
+      : (no ? "innskrevet" : "entered");
+    push("AG", result.ag, fmtNumLocale(result.ag,0), "mmol/L", "ag", agNote);
+  }
+  if(result.agCorr!==null && result.agCorr!==undefined){
+    push(no ? "Albuminkorrigert AG" : "Albumin-corrected AG", result.agCorr, fmtNumLocale(result.agCorr,0), "mmol/L", "ag");
+  }
   return parts;
 }
 
+function flagWord(flag){
+  const no = state.lang==="no";
+  if(flag==="high") return no ? "forhøyet" : "elevated";
+  if(flag==="low")  return no ? "redusert" : "reduced";
+  return "";
+}
 function partToStr(p){
-  const arr = flagArrow(p.flag);
+  const flagTxt = state.noteFlagStyle==="symbols" ? flagArrow(p.flag) : flagWord(p.flag);
   const val = `${p.param} ${p.display}${p.unit?" "+p.unit:""}`;
-  return arr ? `${val} (${arr})` : val;
+  const ann = [flagTxt, p.note].filter(Boolean).join("; ");
+  return ann ? `${val} (${ann})` : val;
 }
 
 function buildFullNotePlain(v, result){
@@ -2033,11 +2158,11 @@ function buildFullNoteHtml(v, result){
     const t = partToStr(p).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     if(p.flag==="high"){
       const inner = applyAbnFormat(t);
-      return state.noteColor ? `<span style="color:#B8741E">${inner}</span>` : inner;
+      return state.noteColor ? `<span style="color:#B8741E" data-cn-color="1">${inner}</span>` : inner;
     }
     if(p.flag==="low"){
       const inner = applyAbnFormat(t);
-      return state.noteColor ? `<span style="color:#AE3A48">${inner}</span>` : inner;
+      return state.noteColor ? `<span style="color:#AE3A48" data-cn-color="1">${inner}</span>` : inner;
     }
     return t;
   }).join(", ");
@@ -2053,6 +2178,169 @@ function wrapAvvikHtml(plain){
   return `<p>${applyAbnFormat(s)}</p>`;
 }
 
+/* ===== COPY: sub/superscript + clean formatting (whole page) ===== */
+// Unicode sub/superscripts (SpO₂, HCO₃⁻, 10⁹/L) are missing from many EPJ fonts.
+// On copy they become real <sub>/<sup> (HTML), \sub/\super (RTF) or plain digits.
+const SUB_MAP = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+const SUP_MAP = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁻':'-'};
+const SUB_RE = /[₀-₉₊₋]+/g, SUP_RE = /[⁰¹²³⁴-⁹⁺⁻]+/g;
+function subSupToHTML(h){
+  return h.replace(SUB_RE, m=>'<sub>'+[...m].map(c=>SUB_MAP[c]).join('')+'</sub>')
+          .replace(SUP_RE, m=>'<sup>'+[...m].map(c=>SUP_MAP[c]).join('')+'</sup>');
+}
+function plainify(t){
+  return String(t==null?'':t)
+    .replace(SUB_RE, m=>[...m].map(c=>SUB_MAP[c]).join(''))
+    .replace(SUP_RE, m=>'^'+[...m].map(c=>SUP_MAP[c]).join(''));
+}
+if(navigator.clipboard && navigator.clipboard.writeText){
+  const _wt = navigator.clipboard.writeText.bind(navigator.clipboard);
+  try{ navigator.clipboard.writeText = t => _wt(plainify(t)); }catch(_){}
+}
+
+const SUBSUP_ANY = /[₀-₉₊₋⁰¹²³⁴-⁹⁺⁻]/;
+// Only these style properties survive into copied HTML: no colour, font or size from the page.
+const COPY_KEEP_STYLE = ["font-weight","font-style","text-decoration","text-decoration-line","white-space"];
+function cleanCopyStyle(styleStr, keepColor){
+  return String(styleStr||"").split(";").map(d=>d.trim()).filter(Boolean).filter(d=>{
+    const prop = d.split(":")[0].trim().toLowerCase();
+    return COPY_KEEP_STYLE.indexOf(prop)!==-1 || (keepColor && prop==="color");
+  }).join("; ");
+}
+function escapeHtmlText(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function normalizeCopyHTML(h){
+  const tpl = document.createElement("template");
+  tpl.innerHTML = String(h==null ? "" : h);
+  const root = tpl.content;
+  root.querySelectorAll("script,style,link,meta,title").forEach(n=>n.remove());
+  root.querySelectorAll("*").forEach(el=>{
+    // Colour is kept only where the user turned on "Fargekoding" for the clinical note.
+    const keepColor = el.getAttribute("data-cn-color")==="1";
+    if(el.hasAttribute("style")){
+      const st = cleanCopyStyle(el.getAttribute("style"), keepColor);
+      if(st) el.setAttribute("style", st); else el.removeAttribute("style");
+    }
+    ["class","id","color","face","size"].forEach(a=>el.removeAttribute(a));
+    Array.from(el.attributes).forEach(a=>{ if(/^data-/.test(a.name)) el.removeAttribute(a.name); });
+  });
+  // h = subSupToHTML(h), applied to text nodes only so attribute values are never touched
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while(walker.nextNode()) textNodes.push(walker.currentNode);
+  textNodes.forEach(n=>{
+    if(!SUBSUP_ANY.test(n.nodeValue)) return;
+    const t = document.createElement("template");
+    t.innerHTML = subSupToHTML(escapeHtmlText(n.nodeValue));
+    n.parentNode.replaceChild(t.content, n);
+  });
+  const holder = document.createElement("div");
+  holder.appendChild(root.cloneNode(true));
+  h = holder.innerHTML;
+  // No font-family / font-size: the receiving program's own font is used throughout.
+  return `<html><head><meta charset="utf-8"></head><body>${h}</body></html>`;
+}
+
+function escapeRtfText(str){
+  let r = "";
+  for(let i=0; i<str.length; i++){
+    const ch = str[i], c = str.charCodeAt(i);
+    if(ch==="\\" || ch==="{" || ch==="}") r += "\\" + ch;
+    else if(ch==="\n") r += "\\line ";
+    else if(ch==="\t") r += "\\tab ";
+    else if(c < 0x80) r += ch;
+    else r += "\\u" + (c > 32767 ? c - 65536 : c) + "?";
+  }
+  return r;
+}
+function parseCssColor(c){
+  c = String(c||"").trim().toLowerCase();
+  let m = c.match(/^#([0-9a-f]{3})$/);
+  if(m) return m[1].split("").map(x=>parseInt(x+x,16));
+  m = c.match(/^#([0-9a-f]{6})$/);
+  if(m) return [0,2,4].map(i=>parseInt(m[1].substr(i,2),16));
+  m = c.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  if(m) return [+m[1],+m[2],+m[3]];
+  return null;
+}
+// HTML → RTF without \fonttbl and \fs, so the text takes the receiving program's font and size.
+function htmlToRtf(html){
+  const doc = new DOMParser().parseFromString(String(html||""), "text/html");
+  const colors = [];
+  const colorIndex = c => {
+    const rgb = parseCssColor(c);
+    if(!rgb) return 0;
+    const key = rgb.join(",");
+    let i = colors.findIndex(x=>x.join(",")===key);
+    if(i===-1){ colors.push(rgb); i = colors.length-1; }
+    return i+1;
+  };
+  const BLOCK = /^(P|DIV|LI|H[1-6]|TR|UL|OL|TABLE|SECTION|ARTICLE|BLOCKQUOTE|PRE)$/;
+  let out = "";
+  const endsWithPar = () => out==="" || /\\par\s*$/.test(out);
+  function walk(node, pre){
+    if(node.nodeType===3){
+      let t = node.nodeValue;
+      if(!pre) t = t.replace(/\s+/g, " ");
+      out += escapeRtfText(t);
+      return;
+    }
+    if(node.nodeType!==1) return;
+    const tag = node.tagName;
+    if(tag==="SCRIPT" || tag==="STYLE" || tag==="HEAD") return;
+    if(tag==="BR"){ out += "\\line "; return; }
+    const st = (node.getAttribute("style")||"").toLowerCase();
+    let open = "";
+    if(tag==="B" || tag==="STRONG" || /font-weight\s*:\s*(bold|[6-9]00)/.test(st)) open += "\\b ";
+    if(tag==="I" || tag==="EM" || /font-style\s*:\s*italic/.test(st)) open += "\\i ";
+    if(tag==="U" || /text-decoration[^;]*underline/.test(st)) open += "\\ul ";
+    const cm = st.match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
+    if(cm){ const ci = colorIndex(cm[1]); if(ci) open += "\\cf" + ci + " "; }
+    const isPre = pre || tag==="PRE" || /white-space\s*:\s*pre/.test(st);
+    const block = BLOCK.test(tag);
+    if(block && !endsWithPar()) out += "\\par\n";
+    if(tag==="SUB") out += "{\\sub ";
+    else if(tag==="SUP") out += "{\\super ";
+    if(open) out += "{" + open;
+    node.childNodes.forEach(ch=>walk(ch, isPre));
+    if(open) out += "}";
+    if(tag==="SUB" || tag==="SUP") out += "}";
+    if(tag==="TD" || tag==="TH") out += "\\tab ";
+    if(block && !endsWithPar()) out += "\\par\n";
+  }
+  walk(doc.body, false);
+  out = out.replace(/(\\par\s*)+$/, "");
+  const colortbl = colors.length
+    ? "{\\colortbl ;" + colors.map(c=>`\\red${c[0]}\\green${c[1]}\\blue${c[2]};`).join("") + "}"
+    : "";
+  return "{\\rtf1\\ansi\\uc1" + colortbl + "\n" + out + "}";
+}
+
+// Every copy on the page (buttons and Ctrl+C on a selection) goes through here.
+let _pendingCopy = null;
+document.addEventListener("copy", e=>{
+  if(!e.clipboardData) return;
+  let html, plain;
+  if(_pendingCopy){
+    html = _pendingCopy.html; plain = _pendingCopy.plain;
+  } else {
+    const ae = document.activeElement;
+    if(ae && (ae.tagName==="INPUT" || ae.tagName==="TEXTAREA")) return;
+    const sel = window.getSelection();
+    if(!sel || sel.isCollapsed || !sel.rangeCount) return;
+    const div = document.createElement("div");
+    for(let i=0; i<sel.rangeCount; i++) div.appendChild(sel.getRangeAt(i).cloneContents());
+    html = div.innerHTML;
+    plain = sel.toString();
+  }
+  const norm = normalizeCopyHTML(html);
+  e.clipboardData.setData("text/html", norm);
+  e.clipboardData.setData("text/plain", plainify(plain));
+  try{ e.clipboardData.setData("text/rtf", htmlToRtf(norm)); }catch(_){}
+  e.preventDefault();
+  if(_pendingCopy) _pendingCopy.handled = true;
+});
+
 async function copyRichText(htmlStr, plainStr, btn){
   const s = UI_STRINGS[state.lang];
   const origText = btn.textContent;
@@ -2061,11 +2349,10 @@ async function copyRichText(htmlStr, plainStr, btn){
     setTimeout(()=>{ btn.textContent=origText; btn.classList.remove("copied"); }, 1800);
   };
 
-  // METHOD 1 — DOM-selection + execCommand (preferred)
-  // The browser's own serializer writes CF_HTML, CF_RTF, and CF_UNICODETEXT
-  // simultaneously, so the result works in Word, WordPad, LibreOffice, and EPJ
-  // systems that only read CF_RTF.
+  // METHOD 1 — selection + execCommand; the copy listener above writes
+  // cleaned HTML, RTF and plainified text.
   try{
+    _pendingCopy = {html:htmlStr, plain:plainStr, handled:false};
     const div = document.createElement("div");
     div.setAttribute("contenteditable", "true");
     div.innerHTML = htmlStr;
@@ -2087,21 +2374,34 @@ async function copyRichText(htmlStr, plainStr, btn){
     const success = document.execCommand("copy");
     sel.removeAllRanges();
     document.body.removeChild(div);
-    if(success){ ok(); return; }
-  }catch(e1){}
+    const handled = _pendingCopy && _pendingCopy.handled;
+    _pendingCopy = null;
+    if(success && handled){ ok(); return; }
+  }catch(e1){ _pendingCopy = null; }
 
-  // METHOD 2 — ClipboardItem API (fallback)
-  // Writes text/html and text/plain only. No CF_RTF, so WordPad and
-  // some EPJ systems will receive unstyled text.
+  // METHOD 2 — ClipboardItem API (fallback): text/html + text/plain.
   try{
-    const hb = new Blob([`<!DOCTYPE html><html><body>${htmlStr}</body></html>`], {type:"text/html"});
-    const pb = new Blob([plainStr], {type:"text/plain"});
+    const hb = new Blob([normalizeCopyHTML(htmlStr)], {type:"text/html"});
+    const pb = new Blob([plainify(plainStr)], {type:"text/plain"});
     await navigator.clipboard.write([new ClipboardItem({"text/html":hb,"text/plain":pb})]);
     ok(); return;
   }catch(e2){}
 
-  // METHOD 3 — plain text (last resort, always works)
-  try{ await navigator.clipboard.writeText(plainStr); ok(); }catch(e3){}
+  // METHOD 3 — plain text
+  try{ await navigator.clipboard.writeText(plainify(plainStr)); ok(); return; }catch(e3){}
+
+  // METHOD 4 — textarea (last resort)
+  try{
+    const ta = document.createElement("textarea");
+    ta.value = plainify(plainStr);
+    ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;left:0;top:0;opacity:0.01;";
+    document.body.appendChild(ta);
+    ta.select();
+    const done = document.execCommand("copy");
+    document.body.removeChild(ta);
+    if(done) ok();
+  }catch(e4){}
 }
 
 function updateAvvikDisplay(){
@@ -2177,7 +2477,7 @@ function renderReport(result, v){
   const toggleLabel = lang==="no"
     ? (state.showRules ? "Skjul regler" : "Vis regler")
     : (state.showRules ? "Hide rules" : "Show rules");
-  const valuesHtml = v ? buildValueSummary(v, result.ag) : "";
+  const valuesHtml = v ? buildValueSummary(v, result.ag, result.agCorr) : "";
   document.getElementById("analyzerReport").innerHTML =
     `<div class="report-head">
        <div class="report-title">${UI_STRINGS[lang].reportTitle}</div>
@@ -2227,6 +2527,7 @@ function loadPreset(presetId){
   document.getElementById("in_fio2").value = "";
   document.getElementById("in_alb").value = "";
   document.getElementById("in_ag").value = "";
+  resetAgFieldState();
   switchTab("panel-analyzer");
   runAnalyzer();
 }
@@ -2267,7 +2568,10 @@ function renderSources(){
   const legal = lang==="no"
     ? "Kildene over er sitert i APA 7. utgave. Ingen tekst fra kildene er gjengitt i appen."
     : "Sources above are cited in APA 7th edition format. No text from any source has been reproduced in this app.";
-  document.getElementById("sourceLegal").innerHTML = `<p>${legal}</p>`;
+  const agNote = lang==="no"
+    ? "Anion gap: referanseområdet er laboratorieavhengig. Appen bruker ca. 8–16 mmol/L for AG = Na⁺ − (Cl⁻ + HCO₃⁻) og ca. 10–20 mmol/L når K⁺ tas med, AG = (Na⁺ + K⁺) − (Cl⁻ + HCO₃⁻). Bruk alltid ditt eget laboratoriums område. HCO₃⁻ er aktuelt bikarbonat (cHCO₃⁻(P)), ikke standard bikarbonat. Albuminkorrigert AG = AG + 0,25 × (40 − albumin g/L) (Figge et al., 1998)."
+    : "Anion gap: the reference range is laboratory-dependent. The app uses roughly 8–16 mmol/L for AG = Na⁺ − (Cl⁻ + HCO₃⁻) and roughly 10–20 mmol/L when K⁺ is included, AG = (Na⁺ + K⁺) − (Cl⁻ + HCO₃⁻). Always use your own laboratory's range. HCO₃⁻ is actual bicarbonate (cHCO₃⁻(P)), not standard bicarbonate. Albumin-corrected AG = AG + 0.25 × (40 − albumin g/L) (Figge et al., 1998).";
+  document.getElementById("sourceLegal").innerHTML = `<p>${legal}</p><p>${agNote}</p>`;
 }
 
 /* ===== TABS LOGIC ===== */
@@ -2368,6 +2672,57 @@ document.getElementById("analyzerForm").addEventListener("submit", e=>{
   e.preventDefault();
   runAnalyzer();
 });
+
+/* -- anion gap: manual entry always wins, electrolytes recalculate otherwise -- */
+document.getElementById("in_ag").addEventListener("input", ()=>{
+  const el = document.getElementById("in_ag");
+  if(el.value.trim()===""){
+    // Cleared: calculation may take over again (applied on blur / next electrolyte change)
+    el.dataset.manual = "";
+    el.classList.remove("is-calc");
+    document.getElementById("agBadge").hidden = true;
+    document.getElementById("agCalcInfo").textContent = "";
+  } else {
+    el.dataset.manual = "1";
+    refreshAgField();
+  }
+});
+document.getElementById("in_ag").addEventListener("blur", refreshAgField);
+document.getElementById("analyzerForm").addEventListener("input", e=>{
+  if(["in_na","in_cl","in_k","in_hco3"].indexOf(e.target.id)!==-1) refreshAgField();
+});
+
+function setAgIncludeK(on){
+  state.agIncludeK = !!on;
+  const kBox = document.getElementById("in_agK");
+  if(kBox) kBox.checked = state.agIncludeK;
+  refreshAgField();
+  updatePlaceholders();
+  renderPresetGrid();
+  const cur = gatherAnalyzerInputs();
+  if(_lastAnalyzerV && cur.ph!==null && cur.pco2!==null && cur.hco3!==null) runAnalyzer();
+  try{ localStorage.setItem("abgReader.agIncludeK", state.agIncludeK); }catch(e){}
+}
+document.getElementById("in_agK").addEventListener("change", e=>{
+  setAgIncludeK(e.target.checked);
+});
+
+/* -- note: show abnormal as words or arrows -- */
+function setNoteFlagStyle(style){
+  state.noteFlagStyle = style==="symbols" ? "symbols" : "words";
+  document.querySelectorAll("#cnFlagStyle .cn-seg-btn").forEach(btn=>{
+    const on = btn.dataset.flagstyle===state.noteFlagStyle;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", on);
+  });
+  if(_lastNoteV && _lastNoteResult) renderClinicalNote(_lastNoteV, _lastNoteResult);
+  try{ localStorage.setItem("abgReader.noteFlagStyle", state.noteFlagStyle); }catch(e){}
+}
+document.getElementById("cnFlagStyle").addEventListener("click", e=>{
+  const btn = e.target.closest(".cn-seg-btn");
+  if(!btn) return;
+  setNoteFlagStyle(btn.dataset.flagstyle);
+});
 /* -- flag symbol -- */
 function setFlagSymbol(sym){
   state.flagSymbol = sym;
@@ -2420,6 +2775,7 @@ document.getElementById("analyzeBtn").addEventListener("click", e=>{
 });
 document.getElementById("clearAnalyzer").addEventListener("click", ()=>{
   document.getElementById("analyzerForm").reset();
+  resetAgFieldState();
   document.getElementById("analyzerHint").textContent = "";
   _lastAnalyzerV = null; _lastAnalyzerResult = null;
   resetAnalyzerReport();
@@ -2463,6 +2819,8 @@ function setLang(lang){
   renderCompNotes();
   renderSources();
   document.getElementById("analyzerForm").reset();
+  resetAgFieldState();
+  updatePlaceholders();
   document.getElementById("analyzerHint").textContent = "";
   resetAnalyzerReport();
   hideTooltip();
@@ -2529,6 +2887,7 @@ document.getElementById("settingsOverlay").addEventListener("click", closeSettin
 /* -- load persisted preferences -- */
 let savedUnit = "kPa", savedLang = "en", savedFontTheme = "plex", savedFontSize = "medium";
 let savedFlagSymbol = "arrows", savedNoteColor = true;
+let savedNoteFlagStyle = "words", savedAgIncludeK = false;
 try{
   savedUnit       = localStorage.getItem("abgReader.unit")       || savedUnit;
   savedLang       = localStorage.getItem("abgReader.lang")       || savedLang;
@@ -2537,6 +2896,8 @@ try{
   savedFlagSymbol = localStorage.getItem("abgReader.flagSymbol") || savedFlagSymbol;
   const sc = localStorage.getItem("abgReader.noteColor");
   if(sc !== null) savedNoteColor = sc === "true";
+  savedNoteFlagStyle = localStorage.getItem("abgReader.noteFlagStyle") || savedNoteFlagStyle;
+  savedAgIncludeK = localStorage.getItem("abgReader.agIncludeK") === "true";
 }catch(e){}
 
 renderParamGrid();
@@ -2553,6 +2914,8 @@ setFontTheme(savedFontTheme);
 setFontSize(savedFontSize);
 setFlagSymbol(savedFlagSymbol);
 setNoteColor(savedNoteColor);
+setNoteFlagStyle(savedNoteFlagStyle);
+setAgIncludeK(savedAgIncludeK);
 </script>
 </body>
 </html>
